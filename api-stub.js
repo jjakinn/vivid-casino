@@ -1,7 +1,7 @@
 // Stub API calls for chanced.com mirror
 (function() {
   const CDN = "https://d3ta80o5sbquaz.cloudfront.net";
-  
+
   // Working Pragmatic Play game IDs
   const PRAGMATIC_GAMES = [
     { id: 1, title: "Sweet Bonanza", identifier: "vs20fruitsw", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
@@ -15,7 +15,7 @@
     { id: 9, title: "Aztec King", identifier: "vs25aztecking", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
     { id: 10, title: "The Hand of Midas", identifier: "vs20midas", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" }
   ];
-  
+
   // Mock category data
   const MOCK_ACTIVE_CATEGORIES = {
     result: {
@@ -60,7 +60,7 @@
       promo_race: null
     }
   };
-  
+
   const MOCK_MAIN_BANNER = {
     result: {
       categories: [
@@ -75,7 +75,7 @@
       ]
     }
   };
-  
+
   const MOCK_ALL_GAMES = {
     results: {
       data: PRAGMATIC_GAMES,
@@ -88,58 +88,39 @@
       { id: 1, name: "Pragmatic Play", count: 10, banned_states: [] }
     ]
   };
-  
+
+  const MOCK_USER = {
+    id: 1,
+    username: "guest",
+    balance: 0,
+    game_mode: "SC",
+    jackpot_amount: null,
+    can_bypass_geofencing: false
+  };
+
+  const MOCK_SITE_CONFIG = {};
+
+  // Helper to get response for a URL
+  function getMockResponse(url) {
+    if (url.includes('/active-categories')) return JSON.stringify(MOCK_ACTIVE_CATEGORIES);
+    if (url.includes('/main-banner')) return JSON.stringify(MOCK_MAIN_BANNER);
+    if (url.includes('/all/games') || url.includes('/slots') || url.includes('/featured') || url.includes('/new-releases')) return JSON.stringify(MOCK_ALL_GAMES);
+    if (url.includes('/site-config')) return JSON.stringify(MOCK_SITE_CONFIG);
+    if (url.includes('/user') && !url.includes('/users/')) return JSON.stringify(MOCK_USER);
+    return '{}';
+  }
+
   // Stub fetch
   const _fetch = window.fetch;
   window.fetch = function(url, opts) {
     const u = url.toString();
-    
-    // Active categories - game list
-    if (u.includes('/active-categories')) {
-      console.log('[STUB] /active-categories');
-      return Promise.resolve(new Response(JSON.stringify(MOCK_ACTIVE_CATEGORIES), {status: 200, headers: {'content-type': 'application/json'}}));
-    }
-    
-    // Main banner
-    if (u.includes('/main-banner')) {
-      console.log('[STUB] /main-banner');
-      return Promise.resolve(new Response(JSON.stringify(MOCK_MAIN_BANNER), {status: 200, headers: {'content-type': 'application/json'}}));
-    }
-    
-    // All games endpoint
-    if (u.includes('/all/games') || u.includes('/slots') || u.includes('/featured') || u.includes('/new-releases')) {
-      console.log('[STUB] games endpoint:', u);
-      return Promise.resolve(new Response(JSON.stringify(MOCK_ALL_GAMES), {status: 200, headers: {'content-type': 'application/json'}}));
-    }
-    
-    // Site config
-    if (u.includes('/site-config')) {
-      console.log('[STUB] /site-config');
-      return Promise.resolve(new Response(JSON.stringify({}), {status: 200, headers: {'content-type': 'application/json'}}));
-    }
-    
-    // User endpoint (return empty user to avoid auth errors)
-    if (u.includes('/user') && !u.includes('/user/')) {
-      console.log('[STUB] /user');
-      return Promise.resolve(new Response(JSON.stringify({
-        id: 1,
-        username: "guest",
-        balance: 0,
-        game_mode: "SC",
-        jackpot_amount: null,
-        can_bypass_geofencing: false
-      }), {status: 200, headers: {'content-type': 'application/json'}}));
-    }
-    
-    // Block all other API calls with empty JSON
     if (u.includes('api.chanced.com') || u.includes('tracking.chanced.com') || u.includes('intercom.io') || u.includes('pusher.com')) {
       console.log('[STUB] fetch:', u);
-      return Promise.resolve(new Response('{}', {status: 200, headers: {'content-type': 'application/json'}}));
+      return Promise.resolve(new Response(getMockResponse(u), {status: 200, headers: {'content-type': 'application/json'}}));
     }
-    
     return _fetch.apply(this, arguments);
   };
-  
+
   // Stub XMLHttpRequest
   const _open = XMLHttpRequest.prototype.open;
   const _send = XMLHttpRequest.prototype.send;
@@ -148,15 +129,16 @@
     this._stubUrl = url;
     return _open.apply(this, arguments);
   };
-  XMLHttpRequest.prototype.send = function() {
+  XMLHttpRequest.prototype.send = function(body) {
     if (this._stubbed) {
       console.log('[STUB] XHR:', this._stubUrl);
       const self = this;
+      const response = getMockResponse(this._stubUrl);
       setTimeout(function() {
         self.readyState = 4;
         self.status = 200;
-        self.responseText = '{}';
-        self.response = '{}';
+        self.responseText = response;
+        self.response = response;
         if (self.onreadystatechange) self.onreadystatechange();
         if (self.onload) self.onload();
       }, 0);
@@ -164,7 +146,7 @@
     }
     return _send.apply(this, arguments);
   };
-  
+
   // Stub WebSocket
   const _WebSocket = window.WebSocket;
   window.WebSocket = function(url) {
