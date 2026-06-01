@@ -407,7 +407,91 @@
   <body class="h-full w-full bg-base-background">
     <!-- API Stub for mirror -->
     <script src="api-stub.js?v=4"></script>
-    <script src="static-games.js"></script>
+    <script>
+    // Inline game grid injection - bypasses all caching issues
+    (function() {
+      const CDN = 'https://d3ta80o5sbquaz.cloudfront.net/images';
+      const GAMES = [
+        { title: 'Gates of Olympus', provider: 'pragmatic', id: 'vs20olympgate' },
+        { title: 'Sweet Bonanza', provider: 'pragmatic', id: 'vs20fruitsw' },
+        { title: 'Big Bass Bonanza', provider: 'pragmatic', id: 'vs10txbigbass' },
+        { title: 'Sugar Rush', provider: 'pragmatic', id: 'vs20sugarrush' },
+        { title: 'Wolf Gold', provider: 'pragmatic', id: 'vs25wolfgold' },
+        { title: 'Joker\'s Jewels', provider: 'pragmatic', id: 'vs5joker' },
+        { title: 'Egyptian Dreams', provider: 'pragmatic', id: 'vs25scarabqueen' },
+        { title: 'The Dog House', provider: 'pragmatic', id: 'vs20doghouse' },
+        { title: 'Aztec King', provider: 'pragmatic', id: 'vs25aztecking' },
+        { title: 'The Hand of Midas', provider: 'pragmatic', id: 'vs20midas' },
+        { title: 'Dream Catcher', provider: 'evolution', id: 'dreamcatcher' },
+        { title: 'Mega Ball', provider: 'evolution', id: 'megaball' },
+        { title: 'Speed Roulette', provider: 'evolution', id: 'speedroulette' },
+        { title: 'Sic Bo', provider: 'evolution', id: 'sicbo' },
+        { title: 'Craps', provider: 'evolution', id: 'craps' },
+      ];
+
+      function createTile(game) {
+        const tile = document.createElement('div');
+        tile.style.cssText = 'position:relative;border-radius:8px;overflow:hidden;cursor:pointer;transition:transform 0.2s;aspect-ratio:0.71;background:#1a1a2e;flex:0 0 auto;width:180px;';
+        tile.onmouseenter = () => tile.style.transform = 'scale(1.05)';
+        tile.onmouseleave = () => tile.style.transform = 'scale(1)';
+
+        const img = document.createElement('img');
+        img.src = `${CDN}/${game.provider}/${game.id}.webp`;
+        img.alt = game.title;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        img.onerror = function() {
+          this.style.display = 'none';
+          const fallback = document.createElement('div');
+          fallback.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#aaa;font-size:12px;text-align:center;padding:8px;';
+          fallback.textContent = game.title;
+          tile.appendChild(fallback);
+        };
+
+        const label = document.createElement('div');
+        label.textContent = game.title;
+        label.style.cssText = 'position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:rgba(0,0,0,0.7);color:#fff;font-size:12px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+
+        tile.appendChild(img);
+        tile.appendChild(label);
+        return tile;
+      }
+
+      function inject() {
+        const headings = document.querySelectorAll('h2');
+        let target = null;
+        for (const h of headings) {
+          if (h.textContent.includes('Games') || h.textContent.includes('Favorite')) {
+            target = h.closest('div[class*="bg-"]') || h.closest('div') || h.parentElement;
+            break;
+          }
+        }
+        if (!target) return;
+
+        const divs = target.querySelectorAll('div');
+        for (const div of divs) {
+          if (div.textContent.includes('Loading') && div.children.length < 3) {
+            div.style.display = 'none';
+          }
+        }
+
+        const container = document.createElement('div');
+        container.style.cssText = 'display:flex;gap:16px;overflow-x:auto;padding:20px 0;scroll-snap-type:x mandatory;';
+        GAMES.forEach(game => {
+          const tile = createTile(game);
+          tile.style.scrollSnapAlign = 'start';
+          container.appendChild(tile);
+        });
+        target.appendChild(container);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(inject, 2000));
+      } else {
+        setTimeout(inject, 2000);
+      }
+      setTimeout(inject, 5000);
+    })();
+    </script>
     <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe
