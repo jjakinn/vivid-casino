@@ -1,83 +1,142 @@
 // Stub API calls for chanced.com mirror
 (function() {
-  const ORIGIN = location.origin;
+  const CDN = "https://d3ta80o5sbquaz.cloudfront.net";
   
-  // Mock game data with real CDN image URLs
-  const MOCK_GAMES = {
-    "getcontent": {
-      "data": [
+  // Working Pragmatic Play game IDs
+  const PRAGMATIC_GAMES = [
+    { id: 1, title: "Sweet Bonanza", identifier: "vs20fruitsw", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 2, title: "Gates of Olympus", identifier: "vs20olympgate", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: true, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 3, title: "Big Bass Bonanza", identifier: "vs10txbigbass", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 4, title: "Sugar Rush", identifier: "vs20sugarrush", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 5, title: "Wolf Gold", identifier: "vs25wolfgold", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: true, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 6, title: "Joker's Jewels", identifier: "vs5joker", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 7, title: "Egyptian Dreams", identifier: "vs25scarabqueen", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 8, title: "The Dog House", identifier: "vs20doghouse", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 9, title: "Aztec King", identifier: "vs25aztecking", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" },
+    { id: 10, title: "The Hand of Midas", identifier: "vs20midas", software: "pragmatic", provider: "pragmatic", provider_name: "Pragmatic Play", has_jackpot: false, provider_id: 1, updated_at: "2024-01-01T00:00:00.000Z" }
+  ];
+  
+  // Mock category data
+  const MOCK_ACTIVE_CATEGORIES = {
+    result: {
+      categories: [
         {
-          "type": "banner",
-          "slug": "main-banner",
-          "show_in_home": true,
-          "data": {
-            "images": [
-              { "image": "images/home/vegasmatt-main.webp", "url": "/", "open_in_new_tab": false },
-              { "image": "images/home/hero-girl.html", "url": "/", "open_in_new_tab": false }
-            ]
-          }
+          id: 1,
+          name: "Slots",
+          slug: "slots",
+          type: "category",
+          show_in_home: true,
+          show_in_menu: true,
+          api_slug: "slots",
+          data: { hide_pills: false, hide_sort_by: false },
+          games: PRAGMATIC_GAMES.slice(0, 6)
         },
         {
-          "type": "category",
-          "slug": "slots",
-          "name": "Slots",
-          "show_in_home": true,
-          "show_in_menu": true,
-          "games": [
-            { "id": 1, "title": "Gates of Olympus", "provider_name": "pragmatic", "identifier": "vs20olympgate", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20olympgate.webp" },
-            { "id": 2, "title": "Sweet Bonanza", "provider_name": "pragmatic", "identifier": "vs20fruitsw", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20fruitsw.webp" },
-            { "id": 3, "title": "Big Bass Bonanza", "provider_name": "pragmatic", "identifier": "vs10txbigbass", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs10txbigbass.webp" },
-            { "id": 4, "title": "Sugar Rush", "provider_name": "pragmatic", "identifier": "vs20sugarrush", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20sugarrush.webp" },
-            { "id": 5, "title": "Wolf Gold", "provider_name": "pragmatic", "identifier": "vs25wolfgold", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs25wolfgold.webp" },
-            { "id": 6, "title": "Madame Destiny", "provider_name": "pragmatic", "identifier": "vs20madame", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20madame.webp" }
-          ]
+          id: 2,
+          name: "Featured",
+          slug: "featured",
+          type: "category",
+          show_in_home: true,
+          show_in_menu: true,
+          api_slug: "featured",
+          data: { hide_pills: false, hide_sort_by: false },
+          games: PRAGMATIC_GAMES.slice(2, 8)
         },
         {
-          "type": "category",
-          "slug": "live-casino",
-          "name": "Live Casino",
-          "show_in_home": true,
-          "show_in_menu": true,
-          "games": [
-            { "id": 10, "title": "Lightning Roulette", "provider_name": "evolution", "identifier": "evol_lightning_roulette", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/evolution/evol_lightning_roulette.webp" },
-            { "id": 11, "title": "Crazy Time", "provider_name": "evolution", "identifier": "evol_crazy_time", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/evolution/evol_crazy_time.webp" },
-            { "id": 12, "title": "Blackjack Classic", "provider_name": "evolution", "identifier": "evol_blackjack_classic", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/evolution/evol_blackjack_classic.webp" }
-          ]
-        },
+          id: 3,
+          name: "New Releases",
+          slug: "new-releases",
+          type: "category",
+          show_in_home: true,
+          show_in_menu: true,
+          api_slug: "new-releases",
+          data: { hide_pills: false, hide_sort_by: false },
+          games: PRAGMATIC_GAMES.slice(4, 10)
+        }
+      ],
+      providers: [
+        { id: 1, name: "Pragmatic Play", count: 10, banned_states: [] }
+      ],
+      promo_race: null
+    }
+  };
+  
+  const MOCK_MAIN_BANNER = {
+    result: {
+      categories: [
         {
-          "type": "category",
-          "slug": "originals",
-          "name": "Originals",
-          "show_in_home": true,
-          "show_in_menu": true,
-          "games": [
-            { "id": 20, "title": "Mines", "provider_name": "original", "identifier": "mines", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/original/mines.webp" },
-            { "id": 21, "title": "Plinko", "provider_name": "original", "identifier": "plinko", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/original/plinko.webp" },
-            { "id": 22, "title": "Dice", "provider_name": "original", "identifier": "dice", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/original/dice.webp" },
-            { "id": 23, "title": "Limbo", "provider_name": "original", "identifier": "limbo", "image": "https://d3ta80o5sbquaz.cloudfront.net/images/original/limbo.webp" }
-          ]
-        },
-        {
-          "type": "section",
-          "slug": "provider-logo",
-          "show_in_home": true
+          id: 1,
+          title: "Welcome Bonus",
+          slug: "welcome",
+          image: "images/home/vegasmatt-main.webp",
+          url: "/",
+          open_in_new_tab: false
         }
       ]
     }
   };
-
+  
+  const MOCK_ALL_GAMES = {
+    results: {
+      data: PRAGMATIC_GAMES,
+      current_page: 1,
+      last_page: 1,
+      per_page: 20,
+      total: PRAGMATIC_GAMES.length
+    },
+    providers: [
+      { id: 1, name: "Pragmatic Play", count: 10, banned_states: [] }
+    ]
+  };
+  
   // Stub fetch
   const _fetch = window.fetch;
   window.fetch = function(url, opts) {
     const u = url.toString();
-    if (u.includes('api.chanced.com/api/getcontent')) {
-      console.log('[STUB] returning mock getcontent');
-      return Promise.resolve(new Response(JSON.stringify(MOCK_GAMES.getcontent), {status: 200, headers: {'content-type': 'application/json'}}));
+    
+    // Active categories - game list
+    if (u.includes('/active-categories')) {
+      console.log('[STUB] /active-categories');
+      return Promise.resolve(new Response(JSON.stringify(MOCK_ACTIVE_CATEGORIES), {status: 200, headers: {'content-type': 'application/json'}}));
     }
+    
+    // Main banner
+    if (u.includes('/main-banner')) {
+      console.log('[STUB] /main-banner');
+      return Promise.resolve(new Response(JSON.stringify(MOCK_MAIN_BANNER), {status: 200, headers: {'content-type': 'application/json'}}));
+    }
+    
+    // All games endpoint
+    if (u.includes('/all/games') || u.includes('/slots') || u.includes('/featured') || u.includes('/new-releases')) {
+      console.log('[STUB] games endpoint:', u);
+      return Promise.resolve(new Response(JSON.stringify(MOCK_ALL_GAMES), {status: 200, headers: {'content-type': 'application/json'}}));
+    }
+    
+    // Site config
+    if (u.includes('/site-config')) {
+      console.log('[STUB] /site-config');
+      return Promise.resolve(new Response(JSON.stringify({}), {status: 200, headers: {'content-type': 'application/json'}}));
+    }
+    
+    // User endpoint (return empty user to avoid auth errors)
+    if (u.includes('/user') && !u.includes('/user/')) {
+      console.log('[STUB] /user');
+      return Promise.resolve(new Response(JSON.stringify({
+        id: 1,
+        username: "guest",
+        balance: 0,
+        game_mode: "SC",
+        jackpot_amount: null,
+        can_bypass_geofencing: false
+      }), {status: 200, headers: {'content-type': 'application/json'}}));
+    }
+    
+    // Block all other API calls with empty JSON
     if (u.includes('api.chanced.com') || u.includes('tracking.chanced.com') || u.includes('intercom.io') || u.includes('pusher.com')) {
       console.log('[STUB] fetch:', u);
       return Promise.resolve(new Response('{}', {status: 200, headers: {'content-type': 'application/json'}}));
     }
+    
     return _fetch.apply(this, arguments);
   };
   
