@@ -491,17 +491,14 @@
         }
         if (!target) return;
 
-        // Hide all existing Loading divs inside target
-        const divs = target.querySelectorAll('div');
-        for (const div of divs) {
-          if (div.textContent.includes('Loading') && div.children.length < 3) {
-            div.style.display = 'none';
+        // Nuke every child of target except the h2 heading itself
+        // This wipes all stale Vue loading rows and any previous injections
+        const children = Array.from(target.children);
+        for (const child of children) {
+          if (child.tagName !== 'H2') {
+            child.remove();
           }
         }
-
-        // Remove any previously injected game containers
-        const existing = target.querySelectorAll('.conveyor-wrapper, div[style*="overflow-x:auto"]');
-        existing.forEach(el => el.remove());
 
         // Inject CSS animation keyframes once
         if (!document.getElementById('conveyor-css')) {
