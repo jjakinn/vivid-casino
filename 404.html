@@ -408,60 +408,133 @@
     <!-- API Stub for mirror -->
     <script src="api-stub.js?v=4"></script>
 
-    <!-- Static Header Injection -->
+    <!-- Comprehensive Page Replacement -->
     <script>
     (function() {
-      function injectHeader() {
+      function buildStaticPage() {
         const app = document.getElementById('app');
         if (!app) return;
-        if (document.getElementById('static-header')) return;
+        if (document.getElementById('static-page')) return;
 
-        const header = document.createElement('div');
-        header.id = 'static-header';
-        header.innerHTML = `
-          <div style="background:#0a0a1a;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;max-width:1400px;margin:0 auto;">
-            <a href="/vivid-casino/" style="display:flex;align-items:center;text-decoration:none;color:#fff;font-size:22px;font-weight:800;">
-              <img src="/vivid-casino/images/favicon/chanced-icon-192.png" alt="Chanced" style="width:36px;height:36px;margin-right:8px;border-radius:6px;">
-              CHANCED
-            </a>
-            <div style="display:flex;align-items:center;gap:24px;">
-              <a href="#faq" style="color:#9ca3af;text-decoration:none;font-size:14px;font-weight:500;">FAQ</a>
-              <a href="https://chanced.com/docs/Terms-And-Conditions.pdf" style="color:#9ca3af;text-decoration:none;font-size:14px;font-weight:500;">Terms</a>
-              <a href="https://www.chanced.com/privacy-policy" style="color:#9ca3af;text-decoration:none;font-size:14px;font-weight:500;">Privacy</a>
-            </div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              <button style="background:transparent;border:1px solid #4b5563;color:#fff;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Log in</button>
-              <button style="background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
-                Sign up
-                <span style="font-size:16px;">→</span>
-              </button>
-            </div>
-          </div>
-          <div style="background:#0a0a1a;padding:40px 24px 60px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
-            <div style="max-width:1400px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:40px;">
-              <div style="flex:1;max-width:600px;">
-                <h1 style="color:#fff;font-size:42px;font-weight:800;line-height:1.1;margin:0 0 20px;">Get Extra Coins + 100 Free Spins</h1>
-                <button style="background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:30px;">Claim Welcome Offer</button>
-                <div style="display:flex;align-items:center;gap:16px;color:#9ca3af;font-size:14px;">
-                  <span style="display:flex;align-items:center;gap:4px;">⭐ #1 Social Casino</span>
-                  <span style="display:flex;align-items:center;gap:4px;">🎰 No Purchase Necessary</span>
+        app.innerHTML = `
+          <div id="static-page" class="flex h-full w-full flex-col text-white">
+            <!-- Header -->
+            <header class="sticky top-0 z-[99999] min-h-[63px] md:min-h-[73px] bg-base-background border-b border-base-border">
+              <div class="flex items-center w-full max-w-[1400px] mx-auto px-4 py-3 h-[62px] md:h-[72px]">
+                <a href="/vivid-casino/" class="flex items-center space-x-2">
+                  <img src="/vivid-casino/images/favicon/chanced-icon-192.png" alt="Chanced" class="w-8 h-8 rounded-md">
+                  <span class="text-white text-xl font-bold tracking-tight">CHANCED</span>
+                </a>
+                <nav class="hidden md:flex items-center space-x-6 ml-auto mr-6">
+                  <a href="#faq" class="text-base-muted-foreground hover:text-white text-sm font-medium transition-colors">FAQ</a>
+                  <a href="https://chanced.com/docs/Terms-And-Conditions.pdf" class="text-base-muted-foreground hover:text-white text-sm font-medium transition-colors">Terms</a>
+                  <a href="https://www.chanced.com/privacy-policy" class="text-base-muted-foreground hover:text-white text-sm font-medium transition-colors">Privacy</a>
+                </nav>
+                <div class="flex items-center space-x-3">
+                  <button class="px-4 py-2 text-sm font-semibold text-white border border-base-border rounded-lg hover:bg-base-muted transition-colors">Log in</button>
+                  <button class="px-4 py-2 text-sm font-semibold text-white bg-base-accent rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1">
+                    Sign up <span class="text-base">→</span>
+                  </button>
                 </div>
               </div>
-              <div style="flex:1;display:flex;justify-content:flex-end;max-width:500px;">
-                <img src="/vivid-casino/images/home/vegasmatt-main.webp" alt="Welcome Bonus" style="width:100%;max-width:400px;border-radius:16px;box-shadow:0 20px 60px rgba(99,102,241,0.3);">
+            </header>
+
+            <!-- Hero -->
+            <section class="w-full bg-base-background relative overflow-hidden">
+              <div class="max-w-[1400px] mx-auto px-4 py-12 md:py-20 flex flex-col md:flex-row items-center gap-8">
+                <div class="flex-1 max-w-[600px]">
+                  <h1 class="text-white text-3xl md:text-5xl font-extrabold leading-tight mb-6">
+                    Get Extra Coins<br>+ 100 Free Spins
+                  </h1>
+                  <button class="px-8 py-4 text-base font-bold text-white bg-base-accent rounded-xl hover:opacity-90 transition-opacity mb-6 shadow-lg shadow-base-accent/30">
+                    Claim Welcome Offer
+                  </button>
+                  <div class="flex items-center gap-4 text-base-muted-foreground text-sm">
+                    <span class="flex items-center gap-1">⭐ #1 Social Casino</span>
+                    <span class="flex items-center gap-1">🎰 No Purchase Necessary</span>
+                  </div>
+                </div>
+                <div class="flex-1 flex justify-end max-w-[500px]">
+                  <img src="/vivid-casino/images/home/vegasmatt-main.webp" alt="Welcome Bonus" class="w-full max-w-[400px] rounded-2xl shadow-2xl shadow-base-accent/20">
+                </div>
               </div>
+            </section>
+
+            <!-- Game Section -->
+            <div class="bg-base-background py-8">
+              <h2 class="text-white text-2xl md:text-3xl font-bold text-center mb-6">Over 1,000 Games - Find Your Favorite!</h2>
             </div>
+
+            <!-- Footer -->
+            <footer class="w-full bg-base-background border-t border-base-border py-12">
+              <div class="max-w-[1400px] mx-auto px-4">
+                <div class="flex items-center justify-between mb-8">
+                  <a href="/vivid-casino/" class="flex items-center space-x-2">
+                    <img src="/vivid-casino/images/favicon/chanced-icon-192.png" alt="Chanced" class="w-8 h-8 rounded-md">
+                    <span class="text-white text-xl font-bold tracking-tight">CHANCED</span>
+                  </a>
+                </div>
+                <p class="text-base-muted-foreground text-sm max-w-3xl mb-8">
+                  Chanced is the #1 Social Casino offering the best online slots, table games, and live dealer experiences. Play with Gold Coins for fun or Sweeps Coins for a chance to win real prizes.
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+                  <div>
+                    <h3 class="text-white font-semibold mb-3">Games</h3>
+                    <ul class="space-y-2 text-base-muted-foreground">
+                      <li><a href="#" class="hover:text-white transition-colors">Slots</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Table Games</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Live Casino</a></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 class="text-white font-semibold mb-3">Support</h3>
+                    <ul class="space-y-2 text-base-muted-foreground">
+                      <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 class="text-white font-semibold mb-3">Legal</h3>
+                    <ul class="space-y-2 text-base-muted-foreground">
+                      <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 class="text-white font-semibold mb-3">Social</h3>
+                    <ul class="space-y-2 text-base-muted-foreground">
+                      <li><a href="#" class="hover:text-white transition-colors">Twitter</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Discord</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mt-8 pt-8 border-t border-base-border text-base-muted-foreground text-xs">
+                  © 2025 Chanced Social Casino. All rights reserved. Play responsibly.
+                </div>
+              </div>
+            </footer>
           </div>
         `;
-        app.insertBefore(header, app.firstChild);
+      }
+
+      function detectAndReplace() {
+        const app = document.getElementById('app');
+        if (!app) return;
+        
+        const loaders = app.querySelectorAll('.animate-pulse');
+        const hasRealContent = app.querySelectorAll('img, button, a').length > 5;
+        
+        if (loaders.length > 0 && !hasRealContent) {
+          buildStaticPage();
+        }
       }
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => setTimeout(injectHeader, 1500));
+        document.addEventListener('DOMContentLoaded', () => setTimeout(detectAndReplace, 3000));
       } else {
-        setTimeout(injectHeader, 1500);
+        setTimeout(detectAndReplace, 3000);
       }
-      setTimeout(injectHeader, 4000);
+      setTimeout(detectAndReplace, 6000);
     })();
     </script>
 
