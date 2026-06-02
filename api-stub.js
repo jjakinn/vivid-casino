@@ -114,7 +114,8 @@
 
   // ===== GAME GRID INJECTION =====
   function getImageUrl(game) {
-    return `${CDN}/${game.provider}/${game.id}.webp`;
+    const provider = game.provider === 'pragmatic' ? 'pragmaticplay' : game.provider;
+    return `${CDN}/images/${provider}/${game.id}.webp`;
   }
 
   function createGameTile(game) {
@@ -178,8 +179,91 @@
       container.appendChild(tile);
     });
 
-    targetSection.appendChild(container);
-    console.log('[GAME GRID] Injected', GAMES.length, 'games');
+  function injectGameGrid() {
+    // Find the game section - look for "Over 1,000 Games" heading
+    const headings = document.querySelectorAll('h2');
+    let targetSection = null;
+    for (const h of headings) {
+      if (h.textContent.includes('Games') || h.textContent.includes('Favorite')) {
+        targetSection = h.closest('div[class*="bg-"]') || h.closest('div') || h.parentElement;
+        break;
+      }
+    }
+
+    if (!targetSection) {
+      console.log('[GAME GRID] Could not find target section');
+      return;
+    }
+
+    // Nuclear approach: remove ALL children except the H2 heading
+    const children = Array.from(targetSection.children);
+    for (const child of children) {
+      if (child.tagName !== 'H2') {
+        child.remove();
+      }
+    }
+
+    // Inject marquee CSS if not already present
+    if (!document.getElementById('vivid-marquee-css')) {
+      const style = document.createElement('style');
+      style.id = 'vivid-marquee-css';
+      style.textContent = `
+        .vivid-game-carousel { width: 100%; overflow: hidden; padding: 12px 0; }
+        .vivid-marquee-track { display: flex; width: max-content; animation: vivid-scroll-left 40s linear infinite; }
+        .vivid-marquee-track.reverse { animation: vivid-scroll-right 45s linear infinite; }
+        .vivid-marquee-track:hover { animation-play-state: paused; }
+        @keyframes vivid-scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes vivid-scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        .vivid-game-tile { flex: 0 0 auto; width: 180px; height: 254px; margin: 0 10px; border-radius: 12px; overflow: hidden; background: #1a1a2e; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; position: relative; }
+        .vivid-game-tile:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 8px 25px rgba(205,91,255,0.3); }
+        .vivid-game-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .vivid-game-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px 12px; background: rgba(0,0,0,0.7); color: #fff; font-size: 12px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        @media (max-width: 768px) { .vivid-game-tile { width: 120px; height: 170px; margin: 0 6px; } }
+      `;
+      document.head.appendChild(style);
+    }
+
+    function createTile(game) {
+      const tile = document.createElement('div');
+      tile.className = 'vivid-game-tile';
+      const img = document.createElement('img');
+      img.src = getImageUrl(game);
+      img.alt = game.title;
+      img.loading = 'lazy';
+      img.onerror = function() {
+        this.style.display = 'none';
+        const fallback = document.createElement('div');
+        fallback.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#aaa;font-size:12px;text-align:center;padding:8px;';
+        fallback.textContent = game.title;
+        tile.appendChild(fallback);
+      };
+      const label = document.createElement('div');
+      label.className = 'vivid-game-label';
+      label.textContent = game.title;
+      tile.appendChild(img);
+      tile.appendChild(label);
+      return tile;
+    }
+
+    function createRow(gamesSubset, reverse) {
+      const row = document.createElement('div');
+      row.className = 'vivid-game-carousel';
+      const track = document.createElement('div');
+      track.className = 'vivid-marquee-track' + (reverse ? ' reverse' : '');
+      for (let i = 0; i < 2; i++) {
+        for (const g of gamesSubset) {
+          track.appendChild(createTile(g));
+        }
+      }
+      row.appendChild(track);
+      return row;
+    }
+
+    const row1Games = GAMES.slice(0, 8);
+    const row2Games = GAMES.slice(7, 15);
+    targetSection.appendChild(createRow(row1Games, false));
+    targetSection.appendChild(createRow(row2Games, true));
+    console.log('[GAME GRID] Injected 2 marquee rows with', GAMES.length, 'games');
   }
 
   // Run injection after a short delay
