@@ -407,6 +407,64 @@
   <body class="h-full w-full bg-base-background">
     <!-- API Stub for mirror -->
     <script src="api-stub.js?v=4"></script>
+
+    <!-- Static Header Injection -->
+    <script>
+    (function() {
+      function injectHeader() {
+        const app = document.getElementById('app');
+        if (!app) return;
+        if (document.getElementById('static-header')) return;
+
+        const header = document.createElement('div');
+        header.id = 'static-header';
+        header.innerHTML = `
+          <div style="background:#0a0a1a;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;max-width:1400px;margin:0 auto;">
+            <a href="/vivid-casino/" style="display:flex;align-items:center;text-decoration:none;color:#fff;font-size:22px;font-weight:800;">
+              <img src="/vivid-casino/images/favicon/chanced-icon-192.png" alt="Chanced" style="width:36px;height:36px;margin-right:8px;border-radius:6px;">
+              CHANCED
+            </a>
+            <div style="display:flex;align-items:center;gap:24px;">
+              <a href="#faq" style="color:#9ca3af;text-decoration:none;font-size:14px;font-weight:500;">FAQ</a>
+              <a href="https://chanced.com/docs/Terms-And-Conditions.pdf" style="color:#9ca3af;text-decoration:none;font-size:14px;font-weight:500;">Terms</a>
+              <a href="https://www.chanced.com/privacy-policy" style="color:#9ca3af;text-decoration:none;font-size:14px;font-weight:500;">Privacy</a>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button style="background:transparent;border:1px solid #4b5563;color:#fff;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Log in</button>
+              <button style="background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
+                Sign up
+                <span style="font-size:16px;">→</span>
+              </button>
+            </div>
+          </div>
+          <div style="background:#0a0a1a;padding:40px 24px 60px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+            <div style="max-width:1400px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:40px;">
+              <div style="flex:1;max-width:600px;">
+                <h1 style="color:#fff;font-size:42px;font-weight:800;line-height:1.1;margin:0 0 20px;">Get Extra Coins + 100 Free Spins</h1>
+                <button style="background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:#fff;padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:30px;">Claim Welcome Offer</button>
+                <div style="display:flex;align-items:center;gap:16px;color:#9ca3af;font-size:14px;">
+                  <span style="display:flex;align-items:center;gap:4px;">⭐ #1 Social Casino</span>
+                  <span style="display:flex;align-items:center;gap:4px;">🎰 No Purchase Necessary</span>
+                </div>
+              </div>
+              <div style="flex:1;display:flex;justify-content:flex-end;max-width:500px;">
+                <img src="/vivid-casino/images/home/vegasmatt-main.webp" alt="Welcome Bonus" style="width:100%;max-width:400px;border-radius:16px;box-shadow:0 20px 60px rgba(99,102,241,0.3);">
+              </div>
+            </div>
+          </div>
+        `;
+        app.insertBefore(header, app.firstChild);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(injectHeader, 1500));
+      } else {
+        setTimeout(injectHeader, 1500);
+      }
+      setTimeout(injectHeader, 4000);
+    })();
+    </script>
+
     <script>
     // Inline game grid injection - 2 conveyor belt rows
     (function() {
