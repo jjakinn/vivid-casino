@@ -408,11 +408,11 @@
     <!-- API Stub for mirror -->
     <script src="api-stub.js?v=4"></script>
     <script>
-    // Inline game grid injection - bypasses all caching issues
+    // Inline game grid injection - 2 conveyor belt rows
     (function() {
       const CDN = 'https://d3ta80o5sbquaz.cloudfront.net/images';
-      const GAMES = [
-        // Pragmatic Play
+
+      const PRAGMATIC = [
         { title: 'Gates of Olympus', provider: 'pragmatic', id: 'vs20olympgate' },
         { title: 'Sweet Bonanza', provider: 'pragmatic', id: 'vs20fruitsw' },
         { title: 'Big Bass Bonanza', provider: 'pragmatic', id: 'vs10txbigbass' },
@@ -422,25 +422,20 @@
         { title: 'Egyptian Dreams', provider: 'pragmatic', id: 'vs25scarabqueen' },
         { title: 'The Dog House', provider: 'pragmatic', id: 'vs20doghouse' },
         { title: 'The Hand of Midas', provider: 'pragmatic', id: 'vs20midas' },
-        // Evolution
+      ];
+
+      const EVOLUTION = [
         { title: 'Dream Catcher', provider: 'evolution', id: 'dreamcatcher' },
         { title: 'Mega Ball', provider: 'evolution', id: 'megaball' },
         { title: 'Speed Roulette', provider: 'evolution', id: 'speedroulette' },
         { title: 'Sic Bo', provider: 'evolution', id: 'sicbo' },
         { title: 'Craps', provider: 'evolution', id: 'craps' },
-        // Relax Gaming
-        { title: 'Chaos Crew', provider: 'relax', id: 'chaoscrew' },
-        { title: 'Money Train 2', provider: 'relax', id: 'moneytrain2' },
-        { title: 'Temple Tumble', provider: 'relax', id: 'templetumble' },
-        { title: 'Iron Bank', provider: 'relax', id: 'ironbank' },
-        { title: 'Snake Arena', provider: 'relax', id: 'snakearena' },
-        { title: 'Hellcatraz', provider: 'relax', id: 'hellcatraz' },
-        { title: 'Marching Legions', provider: 'relax', id: 'marchinglegions' },
       ];
 
       function createTile(game) {
         const tile = document.createElement('div');
-        tile.style.cssText = 'position:relative;border-radius:8px;overflow:hidden;cursor:pointer;transition:transform 0.2s;aspect-ratio:0.71;background:#1a1a2e;flex:0 0 auto;width:180px;';
+        tile.className = 'game-tile';
+        tile.style.cssText = 'position:relative;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform 0.2s;aspect-ratio:0.71;background:#1a1a2e;flex:0 0 auto;width:200px;height:280px;';
         tile.onmouseenter = () => tile.style.transform = 'scale(1.05)';
         tile.onmouseleave = () => tile.style.transform = 'scale(1)';
 
@@ -465,6 +460,26 @@
         return tile;
       }
 
+      function createConveyorRow(games, direction) {
+        // Duplicate games for seamless loop
+        const allGames = [...games, ...games, ...games, ...games];
+
+        const track = document.createElement('div');
+        track.className = 'conveyor-track';
+        track.style.cssText = `display:flex;gap:16px;width:max-content;animation:conveyor-${direction} 30s linear infinite;`;
+
+        allGames.forEach(game => {
+          track.appendChild(createTile(game));
+        });
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'conveyor-wrapper';
+        wrapper.style.cssText = 'overflow:hidden;width:100%;padding:10px 0;';
+        wrapper.appendChild(track);
+
+        return wrapper;
+      }
+
       function inject() {
         const headings = document.querySelectorAll('h2');
         let target = null;
@@ -476,6 +491,7 @@
         }
         if (!target) return;
 
+        // Hide all existing Loading divs inside target
         const divs = target.querySelectorAll('div');
         for (const div of divs) {
           if (div.textContent.includes('Loading') && div.children.length < 3) {
@@ -483,14 +499,35 @@
           }
         }
 
-        const container = document.createElement('div');
-        container.style.cssText = 'display:flex;gap:16px;overflow-x:auto;padding:20px 0;scroll-snap-type:x mandatory;';
-        GAMES.forEach(game => {
-          const tile = createTile(game);
-          tile.style.scrollSnapAlign = 'start';
-          container.appendChild(tile);
-        });
-        target.appendChild(container);
+        // Remove any previously injected game containers
+        const existing = target.querySelectorAll('.conveyor-wrapper, div[style*="overflow-x:auto"]');
+        existing.forEach(el => el.remove());
+
+        // Inject CSS animation keyframes once
+        if (!document.getElementById('conveyor-css')) {
+          const style = document.createElement('style');
+          style.id = 'conveyor-css';
+          style.textContent = `
+            @keyframes conveyor-left {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            @keyframes conveyor-right {
+              0% { transform: translateX(-50%); }
+              100% { transform: translateX(0); }
+            }
+            .conveyor-wrapper:hover .conveyor-track {
+              animation-play-state: paused;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+
+        // Row 1: Pragmatic - scrolls left
+        target.appendChild(createConveyorRow(PRAGMATIC, 'left'));
+
+        // Row 2: Evolution - scrolls right
+        target.appendChild(createConveyorRow(EVOLUTION, 'right'));
       }
 
       if (document.readyState === 'loading') {
