@@ -267,7 +267,7 @@
   }
 
   // Run injection after a short delay
-  setTimeout(injectGameGrid, 1500);
-  // Also try again in case Vue re-renders
-  setTimeout(injectGameGrid, 4000);
+  // DISABLED: game grid injection moved to inline HTML script for cache reliability
+  // setTimeout(injectGameGrid, 1500);
+  // setTimeout(injectGameGrid, 4000);
 })();
