@@ -651,6 +651,80 @@
     })();
     </script>
 
+    <!-- Signup Modal (exact from chanced.com) -->
+    <div id="signup-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:100000;background:rgba(2,6,23,0.8);">
+      <div id="headlessui-dialog-v-3-1" role="dialog" aria-modal="true" data-headlessui-state="open">
+        <div data-v-7a718afa="" class="my-items-center fixed flex justify-center inset-0 z-[99999] overflow-y-auto">
+          <div data-v-7a718afa="" class="md:px-4 px-4 text-center max-w-[100vw] w-full">
+            <div data-v-7a718afa="" id="headlessui-dialog-overlay-v-3-3" aria-hidden="true" data-headlessui-state="open" class="fixed inset-0 bg-base-background/80 backdrop-blur-sm" onclick="document.getElementById('signup-modal').style.display='none'"></div>
+            <div data-v-7a718afa="" class="login-register-wrapper rounded-xl md:my-6 0 bg-base-background inline-block w-full overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-lg border border-base-border modal_title">
+              <div class="flex flex-col md:flex-row">
+                <div class="w-full pb-5 rounded-xl">
+                  <button class="absolute right-3 p-2 hover:opacity-70 text-slate-300 top-4 sm:top-5 cursor-pointer z-10 outline-none" onclick="document.getElementById('signup-modal').style.display='none'">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                  <div class="rounded-b-md grid md:grid-cols-2 md:gap-6 gap-5 md:p-6 p-5">
+                    <div class="hidden md:flex-auto md:block h-full relative overflow-hidden">
+                      <img src="/vivid-casino/images/home/hero-girl.html" class="login-r-banner w-full" alt="register">
+                    </div>
+                    <div class="flex-col justify-between md:gap-6 gap-5 flex md:flex-auto mobile-size min-h-[340px]">
+                      <h2 class="text-lg font-semibold text-white">Create Account</h2>
+                      <div class="flex flex-col gap-3">
+                        <button class="w-full rounded-lg py-4 text-sm font-medium bg-white text-black flex items-center justify-center gap-2">
+                          <img src="/vivid-casino/images/home/google-icon.svg" alt="Google" class="w-5 h-5">
+                          <span>Sign up with Google</span>
+                        </button>
+                        <button class="w-full rounded-lg py-4 text-sm font-medium bg-[#1877F2] text-white flex items-center justify-center gap-2">
+                          <img src="/vivid-casino/images/home/facebook-icon.svg" alt="Facebook" class="w-5 h-5">
+                          <span>Sign up with Facebook</span>
+                        </button>
+                        <button class="w-full rounded-lg py-4 text-sm font-medium bg-[#8C44F7] text-white flex items-center justify-center gap-2">
+                          <img src="/vivid-casino/images/home/twitch-icon.svg" alt="Twitch" class="w-5 h-5">
+                          <span>Sign up with Twitch</span>
+                        </button>
+                        <button class="w-full rounded-lg py-4 text-sm font-medium bg-white text-black flex items-center justify-center gap-2">
+                          <img src="/vivid-casino/images/home/apple-icon.svg" alt="Apple" class="w-5 h-5">
+                          <span>Sign up with Apple</span>
+                        </button>
+                        <button class="w-full rounded-lg py-4 text-sm font-medium bg-[#EC4899] text-white flex items-center justify-center gap-2">
+                          <img src="/vivid-casino/images/home/message-icon.svg" alt="Email" class="w-5">
+                          <span>Sign up with Email</span>
+                        </button>
+                      </div>
+                      <div class="flex justify-between items-center text-sm text-text-dim-color md:mt-6 mt-5">
+                        <span class="text-sm">Already have an account?</span>
+                        <button class="text-pink-400 font-semibold text-sm text-[#EC4899]"> Log In </button>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="text-xs text-center text-text-dim-color px-5 sm:px-6">
+                    This site is protected by reCAPTCHA and the Google
+                    <a href="https://policies.google.com/privacy" class="text-white underline" target="_blank">Privacy Policy</a>
+                    and
+                    <a href="https://policies.google.com/terms" class="text-white underline" target="_blank">Terms of Service</a>
+                    apply.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    // Signup button click handler
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn-singup, .header-btn.btn-singup');
+      if (btn) {
+        e.preventDefault();
+        document.getElementById('signup-modal').style.display = 'block';
+      }
+    });
+    </script>
+
     <script>
     // Inline game grid injection - 2 conveyor belt rows
     (function() {
