@@ -434,7 +434,7 @@
                       '</button>' +
                     '</li>' +
                     '<li data-v-b2b8b7b2="">' +
-                      '<button data-v-b2b8b7b2="" class="header-btn btn-login bg-[unset] text-sm font-semibold text-black flex items-center gap-x-2 px-[45px] py-[15px] font-plusJakartaSans" style="background:transparent;border:1px solid #4b5563;color:#fff !important;border-radius:8px;display:flex !important;visibility:visible !important;opacity:1 !important;" href=""> Log in </button>' +
+                      '<button data-v-b2b8b7b2="" class="header-btn btn-login bg-[unset] text-sm font-semibold text-black flex items-center gap-x-2 px-[45px] py-[15px] font-plusJakartaSans" style="background:transparent;border:1px solid #4b5563;color:#fff !important;border-radius:8px;display:flex !important;visibility:visible !important;opacity:1 !important;" href="" onclick="document.getElementById(\'login-modal\').style.display=\'block\';return false;"> Log in </button>' +
                     '</li>' +
                   '</ul>' +
                 '</div>' +
@@ -463,7 +463,7 @@
                 '<div data-v-d73864cb="" class="absolute font-plusJakartaSans z-20 bottom-0 lg:left-1/2 text-lg lg:text-3xl font-light flex w-full items-center justify-between gap-4 p-4" style="transform: translate(0px, 0px);"></div>' +
               '</div>' +
               '<div data-v-d73864cb="" id="register-btn-wrapper" class="btn-wrapper max-lg:bg-dark2 flex lg:hidden justify-center gap-x-1.5 py-4" style="bottom: 0px;">' +
-                '<button data-v-d73864cb="" class="mobile-btn rounded-[100px] bg-white text-xs font-semibold text-black flex items-center gap-x-2 px-[45px] py-[15px] font-ppMoriSemibold border-transparent shadow-[0px_0px_20px_rgba(255,255,255,0.5)] uppercase" href=""> Log in <span style="font-size:16px;margin-left:4px;">→</span></button>' +
+                '<button data-v-d73864cb="" class="mobile-btn rounded-[100px] bg-white text-xs font-semibold text-black flex items-center gap-x-2 px-[45px] py-[15px] font-ppMoriSemibold border-transparent shadow-[0px_0px_20px_rgba(255,255,255,0.5)] uppercase" href="" onclick="document.getElementById(\'login-modal\').style.display=\'block\';return false;"> Log in <span style="font-size:16px;margin-left:4px;">→</span></button>' +
                 '<button data-v-d73864cb="" class="mobile-btn rounded-[100px] bg-pinkLight text-xs font-semibold text-white flex items-center gap-x-2 px-[45px] py-[15px] font-ppMoriSemibold border-transparent shadow-[0px_0px_20px_rgba(255,255,255,0.5)] uppercase" href="" onclick="document.getElementById(\'signup-modal\').style.display=\'block\';return false;">Sign up <span style="font-size:16px;margin-left:4px;">→</span></button>' +
               '</div>' +
             '</div>' +
@@ -695,8 +695,91 @@
                       </div>
                       <div class="flex justify-between items-center text-sm text-text-dim-color md:mt-6 mt-5">
                         <span class="text-sm">Already have an account?</span>
-                        <button class="text-pink-400 font-semibold text-sm text-[#EC4899]"> Log In </button>
+                        <button class="text-pink-400 font-semibold text-sm text-[#EC4899]" onclick="document.getElementById('signup-modal').style.display='none';document.getElementById('login-modal').style.display='block';return false;"> Log In </button>
                       </div>
+                    </div>
+                  </div>
+                  <p class="text-xs text-center text-text-dim-color px-5 sm:px-6">
+                    This site is protected by reCAPTCHA and the Google
+                    <a href="https://policies.google.com/privacy" class="text-white underline" target="_blank">Privacy Policy</a>
+                    and
+                    <a href="https://policies.google.com/terms" class="text-white underline" target="_blank">Terms of Service</a>
+                    apply.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Modal (exact from chanced.com) -->
+    <div id="login-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999999;">
+      <div id="headlessui-dialog-v-3-1" role="dialog" aria-modal="true" data-headlessui-state="open">
+        <div data-v-7a718afa="" class="my-items-center fixed flex justify-center inset-0 z-[99999] overflow-y-auto">
+          <div data-v-7a718afa="" class="md:px-4 px-4 text-center max-w-[100vw] w-full">
+            <div data-v-7a718afa="" id="headlessui-dialog-overlay-v-3-3" aria-hidden="true" data-headlessui-state="open" class="fixed inset-0 bg-base-background/80 backdrop-blur-sm" onclick="document.getElementById('login-modal').style.display='none'"></div>
+            <div data-v-7a718afa="" class="login-register-wrapper rounded-xl md:my-6 0 bg-base-background inline-block w-full overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-lg border border-base-border modal_title">
+              <div class="flex flex-col md:flex-row">
+                <div class="w-full pb-5 rounded-xl">
+                  <button class="absolute right-3 p-2 hover:opacity-70 text-slate-300 top-4 sm:top-5 cursor-pointer z-10 outline-none" onclick="document.getElementById('login-modal').style.display='none'">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                  <div class="rounded-b-md grid md:grid-cols-2 md:gap-6 gap-5 md:p-6 p-5">
+                    <div class="hidden md:flex-auto md:block h-full relative overflow-hidden">
+                      <img src="/vivid-casino/images/home/login-banner.png" class="login-r-banner w-full" alt="login">
+                    </div>
+                    <div class="flex-col justify-between md:gap-6 gap-5 flex md:flex-auto mobile-size min-h-[340px]">
+                      <h2 class="text-lg font-semibold text-white">Login</h2>
+                      <div class="flex flex-col gap-3">
+                        <div class="flex flex-row justify-center flex-wrap gap-2">
+                          <a href="#" class="flex flex-1 flex-nowrap items-center justify-center gap-1.5 bg-white rounded-[10px] px-4 py-2.5">
+                            <img src="/vivid-casino/images/home/google-icon.svg" class="w-5 h-5" alt="Sign In With Google">
+                            <div class="text-xs hidden sm:block text-black">Google</div>
+                          </a>
+                          <a href="#" class="flex flex-1 flex-nowrap items-center justify-center gap-1.5 bg-[#1877F2] rounded-[10px] px-4 py-2.5">
+                            <img src="/vivid-casino/images/home/facebook-icon.svg" class="w-5 h-5" alt="Sign In With Facebook">
+                            <div class="text-xs hidden sm:block text-white">Facebook</div>
+                          </a>
+                          <a href="#" class="flex flex-1 flex-nowrap items-center justify-center gap-1.5 bg-[#8C44F7] rounded-[10px] px-4 py-2.5">
+                            <img src="/vivid-casino/images/home/twitch-icon.svg" class="w-5 h-5" alt="Sign In With Twitch">
+                            <div class="text-xs hidden sm:block text-white">Twitch</div>
+                          </a>
+                          <a href="#" class="flex flex-1 flex-nowrap items-center justify-center gap-1.5 bg-white rounded-[10px] px-4 py-2.5">
+                            <img src="/vivid-casino/images/home/apple-icon.svg" class="w-5 h-5 rounded-full" alt="Sign In With Apple">
+                            <div class="text-xs hidden sm:block text-black">Apple</div>
+                          </a>
+                        </div>
+                        <div class="flex flex-row items-center w-full mt-6 space-x-2 text-xs text-text-dim-color">
+                          <span class="flex-1 border-b border-base-border"></span>
+                          <span class="text-base-muted-foreground">OR</span>
+                          <span class="flex-1 border-b border-line-color"></span>
+                        </div>
+                        <form class="mt-6">
+                          <label for="login-email" class="block mb-2 text-sm text-base-foreground">Email or Username</label>
+                          <div class="relative">
+                            <input required="" type="text" id="login-email" class="input-with-icon h-[40px] pl-4 input-placeholder focus:ring-base-foreground bg-base-input-background border border-base-border" placeholder="Enter email address or username" style="width:100%;border-radius:8px;color:#fff;">
+                          </div>
+                          <div class="flex items-center justify-between mt-6">
+                            <label for="login-password" class="block mb-2 text-sm text-base-foreground">Password</label>
+                            <a href="#" class="mb-1 text-xs text-center text-base-muted-foreground underline block"> Forgot your password? </a>
+                          </div>
+                          <div class="relative mb-6 input-wrapper">
+                            <input required="" type="password" id="login-password" class="input-with-icon h-[40px] pl-4 input-placeholder focus:ring-base-foreground bg-base-input-background border border-base-border" placeholder="Enter your password" style="width:100%;border-radius:8px;color:#fff;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#888;">
+                              <path d="M9.87988 9.87988C9.58514 10.1545 9.34873 10.4857 9.18476 10.8537C9.02079 11.2217 8.93262 11.619 8.92552 12.0218C8.91841 12.4246 8.99251 12.8247 9.14339 13.1983C9.29428 13.5718 9.51885 13.9112 9.80373 14.196C10.0886 14.4809 10.4279 14.7055 10.8015 14.8564C11.175 15.0073 11.5752 15.0814 11.978 15.0742C12.3808 15.0671 12.778 14.979 13.146 14.815C13.514 14.651 13.8452 14.4146 14.1199 14.1199M10.73 5.08C11.1513 5.02751 11.5754 5.00079 12 5C19 5 22 12 22 12C21.5529 12.9571 20.9922 13.8569 20.33 14.68M6.61 6.61011C4.62125 7.96473 3.02987 9.82537 2 12.0001C2 12.0001 5 19.0001 12 19.0001C13.9159 19.0052 15.7908 18.4452 17.39 17.3901M2 2L22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                          </div>
+                          <button disabled="" class="button1-5 unclickable" style="width:100%;padding:12px;border-radius:8px;border:none;background:#333;color:#888;cursor:not-allowed;font-weight:600;"> Login </button>
+                        </form>
+                      </div>
+                      <p class="flex items-center justify-between text-center text-base-muted-foreground text-sm">
+                        <span>Don't have an account?</span>
+                        <a href="#" class="text-sm text-base-primary" onclick="document.getElementById('login-modal').style.display='none';document.getElementById('signup-modal').style.display='block';return false;" style="color:#EC4899;"> Sign Up </a>
+                      </p>
                     </div>
                   </div>
                   <p class="text-xs text-center text-text-dim-color px-5 sm:px-6">
@@ -721,6 +804,17 @@
       if (btn) {
         e.preventDefault();
         document.getElementById('signup-modal').style.display = 'block';
+      }
+    });
+    </script>
+
+    <script>
+    // Login button click handler
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn-login, .header-btn.btn-login');
+      if (btn) {
+        e.preventDefault();
+        document.getElementById('login-modal').style.display = 'block';
       }
     });
     </script>
