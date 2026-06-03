@@ -627,6 +627,37 @@
         '</div>';
 
         document.body.appendChild(fallback);
+
+        // FAQ accordion click handlers
+        (function() {
+          const questions = fallback.querySelectorAll('.question');
+          questions.forEach(function(q) {
+            q.style.cursor = 'pointer';
+            const content = q.parentElement.querySelector('.content');
+            if (content) {
+              content.style.maxHeight = '0';
+              content.style.overflow = 'hidden';
+              content.style.transition = 'max-height 0.3s ease';
+            }
+            q.addEventListener('click', function() {
+              const isOpen = q.getAttribute('aria-expanded') === 'true';
+              const allQuestions = fallback.querySelectorAll('.question');
+              allQuestions.forEach(function(otherQ) {
+                otherQ.setAttribute('aria-expanded', 'false');
+                const otherContent = otherQ.parentElement.querySelector('.content');
+                if (otherContent) otherContent.style.maxHeight = '0';
+                const otherToggle = otherQ.querySelector('.accor_toggle');
+                if (otherToggle) otherToggle.style.transform = 'rotate(0deg)';
+              });
+              if (!isOpen) {
+                q.setAttribute('aria-expanded', 'true');
+                if (content) content.style.maxHeight = content.scrollHeight + 'px';
+                const toggle = q.querySelector('.accor_toggle');
+                if (toggle) toggle.style.transform = 'rotate(45deg)';
+              }
+            });
+          });
+        })();
       }
 
       // Run immediately when DOM is ready, no detection needed
