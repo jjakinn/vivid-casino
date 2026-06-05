@@ -889,4 +889,30 @@ function toggleSidebar() {
   </a>
 </div>
 
+<script>
+(function() {
+  function fixGameLinks() {
+    // Fix game tile links (in slider-tile containers, excluding see-all buttons)
+    document.querySelectorAll('.slider-tile:not(.see-all-button) a[href^="/"]').forEach(function(link) {
+      var href = link.getAttribute('href');
+      // Skip category links
+      if (href.includes('/casino/group/')) return;
+      if (href.includes('/promo-race/')) return;
+      // Skip already-absolute URLs
+      if (href.startsWith('http')) return;
+      // Point to chanced.com
+      link.setAttribute('href', 'https://chanced.com' + href);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixGameLinks);
+  } else {
+    fixGameLinks();
+  }
+})();
+</script>
+
 </body></html>
