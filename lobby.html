@@ -898,12 +898,22 @@ function toggleSidebar() {
       // Skip category links
       if (href.includes('/casino/group/')) return;
       if (href.includes('/promo-race/')) return;
+      if (href.includes('/search')) return;
       // Skip already-absolute URLs
       if (href.startsWith('http')) return;
-      // Point to chanced.com
-      link.setAttribute('href', 'https://chanced.com' + href);
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
+
+      // Extract game info from href like /provider/casino/games/gameid
+      var parts = href.replace(/^\//, '').split('/');
+      var provider = parts[0] || 'unknown';
+      var gameId = parts[parts.length - 1] || 'game';
+      // Get image URL from the tile
+      var img = link.querySelector('img[alt="Game Tile"]');
+      var src = img ? img.getAttribute('src') : '';
+      // Get title from alt or parse from ID
+      var title = gameId.replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+
+      // Point to local game page
+      link.setAttribute('href', 'game.html?game=' + encodeURIComponent(gameId) + '&provider=' + encodeURIComponent(provider) + '&title=' + encodeURIComponent(title) + '&src=' + encodeURIComponent(src));
     });
   }
 

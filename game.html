@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Vivid - Game</title>
+  <meta name="theme-color" content="#020617" />
+  <link rel="shortcut icon" sizes="196x196" href="images/home/vivid-logo.jpg" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #0f172a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow: hidden; }
+
+    /* Top Bar */
+    .game-header {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      border-bottom: 1px solid #334155;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; z-index: 1000; gap: 12px;
+    }
+    .game-header-left { display: flex; align-items: center; gap: 12px; }
+    .game-header-logo { height: 32px; width: auto; cursor: pointer; }
+    .game-header-back {
+      background: none; border: none; color: #94a3b8; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; font-size: 14px; padding: 4px 8px;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .game-header-back:hover { background: #1e293b; color: #fff; }
+    .game-header-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+    .game-header-title { font-size: 14px; font-weight: 600; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .game-header-provider { font-size: 11px; color: #64748b; }
+    .game-header-balance { display: flex; align-items: center; gap: 8px; }
+    .balance-pill {
+      background: #1e293b; border: 1px solid #334155; border-radius: 20px;
+      padding: 4px 12px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600;
+    }
+    .balance-pill img { width: 16px; height: 16px; }
+    .wallet-btn {
+      background: #3b82f6; border: none; border-radius: 8px; color: #fff;
+      padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background 0.2s; display: flex; align-items: center; gap: 4px;
+    }
+    .wallet-btn:hover { background: #2563eb; }
+
+    /* Game Container */
+    .game-container {
+      position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+      background: #000; display: flex; align-items: center; justify-content: center;
+    }
+    .game-iframe {
+      width: 100%; height: 100%; border: none; background: #000;
+    }
+
+    /* Loading Overlay */
+    .game-loading {
+      position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+      background: #0f172a; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 999; gap: 20px;
+    }
+    .game-loading.hidden { display: none; }
+    .game-loading-spinner {
+      width: 48px; height: 48px; border: 3px solid #334155;
+      border-top-color: #3b82f6; border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .game-loading-text { font-size: 14px; color: #94a3b8; }
+    .game-loading-game {
+      width: 160px; height: 224px; border-radius: 8px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .game-loading-game img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Error Overlay */
+    .game-error {
+      position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+      background: #0f172a; display: none; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 998; gap: 16px; padding: 20px;
+    }
+    .game-error.active { display: flex; }
+    .game-error-icon { font-size: 48px; }
+    .game-error-title { font-size: 18px; font-weight: 600; color: #f1f5f9; }
+    .game-error-desc { font-size: 14px; color: #94a3b8; text-align: center; max-width: 400px; }
+    .game-error-btn {
+      background: #3b82f6; border: none; border-radius: 8px; color: #fff;
+      padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;
+      text-decoration: none; margin-top: 8px;
+    }
+    .game-error-btn:hover { background: #2563eb; }
+
+    /* Mobile Bottom Nav */
+    .mobile-bottom-nav {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0;
+      height: 60px; background: #1e293b; border-top: 1px solid #334155;
+      z-index: 1001; justify-content: space-around; align-items: center;
+    }
+    .mobile-bottom-nav a {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      color: #64748b; text-decoration: none; font-size: 10px;
+    }
+    .mobile-bottom-nav a.active { color: #3b82f6; }
+    .mobile-bottom-nav a svg { width: 22px; height: 22px; }
+    @media (max-width: 767px) {
+      .mobile-bottom-nav { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="game-header">
+    <div class="game-header-left">
+      <a href="lobby.html" class="game-header-back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Back
+      </a>
+      <img src="images/home/vivid-logo.png" alt="Vivid" class="game-header-logo" onclick="location.href='lobby.html'" />
+    </div>
+    <div class="game-header-info">
+      <div class="game-header-title" id="gameTitle">Loading...</div>
+      <div class="game-header-provider" id="gameProvider">Loading...</div>
+    </div>
+    <div class="game-header-balance">
+      <div class="balance-pill">
+        <img src="assets/gold-BB1k7Ztr.png" alt="GC" />
+        <span>0.00</span>
+      </div>
+      <div class="balance-pill">
+        <img src="assets/gold-BB1k7Ztr.png" alt="SC" />
+        <span>0.00</span>
+      </div>
+      <button class="wallet-btn" onclick="alert('Wallet feature coming soon')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        Wallet
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div class="game-loading" id="gameLoading">
+    <div class="game-loading-game" id="loadingGameImg"><img src="" alt="" /></div>
+    <div class="game-loading-spinner"></div>
+    <div class="game-loading-text">Loading game...</div>
+  </div>
+
+  <!-- Error Screen -->
+  <div class="game-error" id="gameError">
+    <div class="game-error-icon">🎰</div>
+    <div class="game-error-title">Game Unavailable</div>
+    <div class="game-error-desc">This demo shows the game page layout. Real games require a casino backend connection.</div>
+    <a href="lobby.html" class="game-error-btn">Back to Lobby</a>
+  </div>
+
+  <!-- Game Iframe -->
+  <div class="game-container">
+    <iframe class="game-iframe" id="gameFrame" allow="fullscreen" allowfullscreen></iframe>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <div class="mobile-bottom-nav">
+    <a href="#" onclick="history.back(); return false;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Back
+    </a>
+    <a href="lobby.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="lobby.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Slots
+    </a>
+  </div>
+
+  <script>
+  (function() {
+    const params = new URLSearchParams(location.search);
+    const gameId = params.get('game') || '';
+    const provider = params.get('provider') || '';
+    const title = params.get('title') || 'Game';
+    const source = params.get('src') || '';
+
+    // Update header info
+    document.getElementById('gameTitle').textContent = title;
+    document.getElementById('gameProvider').textContent = provider ? provider.toUpperCase() : 'Loading...';
+    document.title = 'Vivid - ' + title;
+
+    // Loading game image
+    const loadingImg = document.querySelector('#loadingGameImg img');
+    if (source) {
+      loadingImg.src = source;
+      loadingImg.alt = title;
+    } else {
+      document.getElementById('loadingGameImg').style.display = 'none';
+    }
+
+    // Try to load the game
+    const gameFrame = document.getElementById('gameFrame');
+    const gameLoading = document.getElementById('gameLoading');
+    const gameError = document.getElementById('gameError');
+
+    // For demo purposes: show the loading screen for 3 seconds then show error
+    // In production, you'd set the iframe src to the actual game URL
+    setTimeout(function() {
+      gameLoading.classList.add('hidden');
+      // Show error since this is a demo without real backend
+      gameError.classList.add('active');
+    }, 3000);
+
+    // Alternative: if you have a real game URL, uncomment below:
+    // const gameUrl = 'https://chanced.com/casino/games/' + provider + '-' + gameId;
+    // gameFrame.src = gameUrl;
+    // gameFrame.onload = function() { gameLoading.classList.add('hidden'); };
+    // gameFrame.onerror = function() { gameLoading.classList.add('hidden'); gameError.classList.add('active'); };
+  })();
+  </script>
+</body>
+</html>
