@@ -116,21 +116,50 @@
             min-height: -webkit-fill-available;
           }
 
-          /* Safari-only: sticky doesn't work in nested flex, use fixed */
-          header.sticky {
-            position: fixed !important;
+          /* Safari: sticky doesn't work in nested flex, use absolute */
+          .safari .flex-col.h-screen {
+            position: relative;
+          }
+          .safari header.sticky {
+            position: absolute !important;
             top: 0;
             left: 0;
             right: 0;
           }
-          /* Safari-only: compensate for fixed header removing flow */
-          .main_games {
+          .safari .main_games {
             padding-top: 63px;
           }
           @media (min-width: 768px) {
-            .main_games {
+            .safari .main_games {
               padding-top: 73px;
             }
+          }
+
+          /* Safari: logo fix - prevent clipping */
+          .safari header a img[alt="Chanced"] {
+            height: auto !important;
+            max-height: 32px;
+            align-self: center;
+          }
+
+          /* Safari: jackpot slider height fix */
+          .safari .home-jackpot-slider {
+            max-height: 210px !important;
+          }
+          .safari .home-jackpot-slider .slider-tile {
+            max-height: 190px !important;
+            height: auto !important;
+            min-height: 140px !important;
+          }
+          .safari .home-jackpot-slider .slider-tile > a,
+          .safari .home-jackpot-slider .slider-tile > a > div {
+            max-height: 190px !important;
+            height: auto !important;
+            min-height: 140px !important;
+          }
+          .safari .home-jackpot-slider img {
+            max-height: 190px !important;
+            height: auto !important;
           }
         }
       }
@@ -176,6 +205,11 @@
 
 </head>
 <body class="h-full w-full bg-base-background active">
+<script>
+if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+  document.body.classList.add('safari');
+}
+</script>
 <!-- Google Tag Manager (noscript) -->
 <!-- End Google Tag Manager (noscript) -->
 <input aria-hidden="true" id="custom_ip" name="ip" type="hidden" value="82.149.80.47"/>
