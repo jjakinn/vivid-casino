@@ -88,6 +88,20 @@
       a, button {
         touch-action: manipulation;
       }
+
+      /* Safari-specific fixes */
+      @supports (-webkit-touch-callout: none) {
+        /* .main_games has explicit height:100vh which conflicts with flex-1 in Safari */
+        .main_games {
+          height: auto !important;
+          min-height: 0 !important;
+        }
+        /* Fix sticky header in flex containers */
+        header.sticky {
+          align-self: flex-start;
+          flex-shrink: 0;
+        }
+      }
 </style>
 <!-- OneTrust Cookies Consent Notice start for www.jjakinn.github.io/vivid-casino -->
 
