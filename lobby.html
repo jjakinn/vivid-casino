@@ -158,6 +158,75 @@
         max-height: 220px !important;
         height: auto !important;
       }
+
+      /* Mobile sidebar toggle */
+      @media (max-width: 767px) {
+        aside.mobile-open {
+          display: flex !important;
+          position: fixed !important;
+          left: 0 !important;
+          top: 0 !important;
+          z-index: 99999 !important;
+        }
+      }
+
+      /* Mobile game grid layout */
+      @media (max-width: 767px) {
+        .home-casino-slider,
+        .home-jackpot-slider {
+          display: grid !important;
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 8px !important;
+          overflow-x: visible !important;
+        }
+        .home-casino-slider .slider-tile,
+        .home-jackpot-slider .slider-tile {
+          min-width: auto !important;
+          width: 100% !important;
+        }
+      }
+
+      /* Mobile bottom navigation bar */
+      @media (max-width: 767px) {
+        .mobile-bottom-nav {
+          display: flex !important;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 99998;
+          background: #0a0a0a;
+          border-top: 1px solid #1a1a1a;
+          padding: 8px 0;
+          justify-content: space-around;
+          align-items: center;
+        }
+        .mobile-bottom-nav a {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          color: #666;
+          text-decoration: none;
+          font-size: 10px;
+          gap: 4px;
+        }
+        .mobile-bottom-nav a.active {
+          color: #fff;
+        }
+        .mobile-bottom-nav svg {
+          width: 24px;
+          height: 24px;
+        }
+        /* Add padding to main content for bottom nav */
+        .main_games {
+          padding-bottom: 60px !important;
+        }
+      }
+      @media (min-width: 768px) {
+        .mobile-bottom-nav {
+          display: none !important;
+        }
+      }
     </style>
 <!-- OneTrust Cookies Consent Notice start for www.jjakinn.github.io/vivid-casino -->
 
@@ -203,6 +272,12 @@
 <script>
 if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
   document.body.classList.add('safari');
+}
+function toggleSidebar() {
+  const sidebar = document.querySelector('aside.flex-col');
+  if (sidebar) {
+    sidebar.classList.toggle('mobile-open');
+  }
 }
 </script>
 <!-- Google Tag Manager (noscript) -->
