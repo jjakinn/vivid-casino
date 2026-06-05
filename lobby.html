@@ -58,7 +58,7 @@
       }
 
       body {
-        width: 100%;
+        width: 100vw;
         height: 100vh;
         -webkit-overflow-scrolling: touch;
       }
@@ -84,40 +84,9 @@
         opacity: 1;
       }
     
-      /* Safari & Mobile Fixes */
-      html {
-        -webkit-text-size-adjust: 100%;
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
-        overflow-x: hidden;
-      }
-      body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        overflow-x: hidden;
-      }
-      /* iOS Safari viewport height fix */
-      @supports (-webkit-touch-callout: none) {
-        body {
-          height: -webkit-fill-available;
-        }
-        .h-dvh, .h-screen, .h-full {
-          min-height: -webkit-fill-available;
-        }
-      }
       /* Remove 300ms tap delay on mobile */
       a, button {
         touch-action: manipulation;
-      }
-      /* Ensure smooth scrolling on iOS */
-      .overflow-y-auto, .overflow-x-auto, .overflow-x-scroll, .overflow-y-scroll {
-        -webkit-overflow-scrolling: touch;
-      }
-      /* Safari flexbox gap fallback */
-      @supports not (gap: 1rem) {
-        .flex { margin: -0.5rem; }
-        .flex > * { margin: 0.5rem; }
       }
 </style>
 <!-- OneTrust Cookies Consent Notice start for www.jjakinn.github.io/vivid-casino -->
@@ -132,7 +101,7 @@
 <link href="https://cdn.cookielaw.org" rel="dns-prefetch"/>
 <!-- Preconnect to critical domains -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.gstatic.com" rel="preconnect"/>
 <!-- Preload critical resources -->
 <link as="image" fetchpriority="high" href="/vivid-casino/images/home/hero-girl.webp" rel="preload" type="image/webp"/>
 <link as="image" fetchpriority="high" href="/vivid-casino/images/home/home-1.webp" rel="preload" type="image/webp"/>
