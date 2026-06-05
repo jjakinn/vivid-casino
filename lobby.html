@@ -132,6 +132,17 @@
             height: 100vh;
             min-height: -webkit-fill-available;
           }
+
+          /* Safari: jackpot tile height fix — prevent vertical stretching */
+          .home-jackpot-slider .slider-tile,
+          .home-jackpot-slider .slider-tile > a,
+          .home-jackpot-slider .slider-tile > a > div,
+          .home-jackpot-slider .slider-tile img {
+            max-height: 220px !important;
+          }
+          .home-jackpot-slider .slider-tile > a > div {
+            height: auto !important;
+          }
         }
       }
     </style>
