@@ -170,19 +170,34 @@
         }
       }
 
-      /* Mobile game grid layout */
+      /* Mobile: keep horizontal scroll like chanced.com */
       @media (max-width: 767px) {
         .home-casino-slider,
         .home-jackpot-slider {
-          display: grid !important;
-          grid-template-columns: repeat(2, 1fr) !important;
+          display: flex !important;
+          flex-wrap: nowrap !important;
+          overflow-x: auto !important;
+          -webkit-overflow-scrolling: touch;
           gap: 8px !important;
-          overflow-x: visible !important;
+          padding-left: 8px;
+          padding-right: 8px;
         }
         .home-casino-slider .slider-tile,
         .home-jackpot-slider .slider-tile {
-          min-width: auto !important;
-          width: 100% !important;
+          min-width: 140px !important;
+          width: 140px !important;
+          flex-shrink: 0 !important;
+        }
+        .home-casino-slider .slider-tile img,
+        .home-jackpot-slider .slider-tile img {
+          width: 140px !important;
+          height: auto !important;
+        }
+        /* SEE All tile sizing */
+        .home-casino-slider .slider-tile.see-all-button,
+        .home-jackpot-slider .slider-tile.see-all-button {
+          min-width: 100px !important;
+          width: 100px !important;
         }
       }
 
@@ -211,6 +226,20 @@
           gap: 4px;
         }
         .mobile-bottom-nav a.active {
+          color: #fff;
+        }
+        .mobile-bottom-nav a:nth-child(3) {
+          background: linear-gradient(135deg, #E91E63, #9C27B0);
+          border-radius: 12px;
+          padding: 6px 12px;
+          color: #fff;
+          margin-top: -20px;
+          box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+        }
+        .mobile-bottom-nav a:nth-child(3) svg {
+          stroke: #fff;
+        }
+        .mobile-bottom-nav a:nth-child(3).active {
           color: #fff;
         }
         .mobile-bottom-nav svg {
@@ -836,5 +865,28 @@ function toggleSidebar() {
 
 
 
+
+<div class="mobile-bottom-nav" id="mobile-bottom-nav">
+  <a href="#" onclick="toggleSidebar(); return false;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    Menu
+  </a>
+  <a href="/search">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.34-4.34"></path></svg>
+    Search
+  </a>
+  <a href="/?tab=bank" class="active">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+    Wallet
+  </a>
+  <a href="/">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    Home
+  </a>
+  <a href="/casino/group/slots">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+    Slots
+  </a>
+</div>
 
 </body></html>
