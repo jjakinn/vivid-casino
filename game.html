@@ -1,264 +1,354 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="--scrollbar-width: 0px;">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <title>Vivid - Game</title>
-  <meta name="theme-color" content="#020617" />
-  <link rel="shortcut icon" sizes="196x196" href="images/home/vivid-logo.jpg" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; background: #0f172a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow: hidden; }
-
-    /* Top Bar - matches chanced.com styling */
-    .game-header {
-      position: fixed; top: 0; left: 0; right: 0; height: 56px;
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px; z-index: 1000; gap: 12px;
-    }
-    .game-header-left { display: flex; align-items: center; gap: 12px; }
-    .game-header-logo { height: 32px; width: auto; cursor: pointer; }
-    .game-header-back {
-      background: none; border: none; color: #94a3b8; cursor: pointer;
-      display: flex; align-items: center; gap: 6px; font-size: 14px; padding: 4px 8px;
-      border-radius: 6px; transition: all 0.2s;
-    }
-    .game-header-back:hover { background: #1e293b; color: #fff; }
-    .game-header-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
-    .game-header-title { font-size: 14px; font-weight: 600; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .game-header-provider { font-size: 11px; color: #64748b; }
-    .game-header-balance { display: flex; align-items: center; gap: 8px; }
-    .balance-pill {
-      background: #1e293b; border: 1px solid #334155; border-radius: 20px;
-      padding: 4px 12px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600;
-    }
-    .balance-pill img { width: 16px; height: 16px; }
-    .wallet-btn {
-      background: #3b82f6; border: none; border-radius: 8px; color: #fff;
-      padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
-      transition: background 0.2s; display: flex; align-items: center; gap: 4px;
-    }
-    .wallet-btn:hover { background: #2563eb; }
-
-    /* Game Iframe - Full Screen */
-    .game-container {
-      position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
-      background: #000; display: flex; align-items: center; justify-content: center;
-    }
-    .game-iframe {
-      width: 100%; height: 100%; border: none; background: #000;
-    }
-
-    /* Loading Overlay */
-    .game-loading {
-      position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
-      background: #0f172a; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; z-index: 999; gap: 20px;
-    }
-    .game-loading.hidden { display: none; }
-    .game-loading-spinner {
-      width: 48px; height: 48px; border: 3px solid #334155;
-      border-top-color: #3b82f6; border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .game-loading-text { font-size: 14px; color: #94a3b8; }
-    .game-loading-game {
-      width: 160px; height: 224px; border-radius: 8px; overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    .game-loading-game img { width: 100%; height: 100%; object-fit: cover; }
-
-    /* Error Overlay - Shown when iframe fails */
-    .game-error {
-      position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
-      background: #0f172a; display: none; flex-direction: column;
-      align-items: center; justify-content: center; z-index: 998; gap: 16px; padding: 20px;
-    }
-    .game-error.active { display: flex; }
-    .game-error-icon { font-size: 48px; }
-    .game-error-title { font-size: 18px; font-weight: 600; color: #f1f5f9; }
-    .game-error-desc { font-size: 14px; color: #94a3b8; text-align: center; max-width: 400px; }
-    .game-error-btn {
-      background: #3b82f6; border: none; border-radius: 8px; color: #fff;
-      padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;
-      text-decoration: none; margin-top: 8px;
-    }
-    .game-error-btn:hover { background: #2563eb; }
-
-    /* Mobile Bottom Nav */
-    .mobile-bottom-nav {
-      display: none; position: fixed; bottom: 0; left: 0; right: 0;
-      height: 60px; background: #1e293b; border-top: 1px solid #334155;
-      z-index: 1001; justify-content: space-around; align-items: center;
-    }
-    .mobile-bottom-nav a {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      color: #64748b; text-decoration: none; font-size: 10px;
-    }
-    .mobile-bottom-nav a.active { color: #3b82f6; }
-    .mobile-bottom-nav a svg { width: 22px; height: 22px; }
-    @media (max-width: 767px) {
-      .mobile-bottom-nav { display: flex; }
-      .game-container { bottom: 60px; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Top Bar -->
-  <div class="game-header">
-    <div class="game-header-left">
-      <a href="lobby.html" class="game-header-back">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        Back
-      </a>
-      <img src="images/home/vivid-logo.png" alt="Vivid" class="game-header-logo" onclick="location.href='lobby.html'" />
-    </div>
-    <div class="game-header-info">
-      <div class="game-header-title" id="gameTitle">Loading...</div>
-      <div class="game-header-provider" id="gameProvider">Loading...</div>
-    </div>
-    <div class="game-header-balance">
-      <div class="balance-pill">
-        <img src="assets/gold-BB1k7Ztr.png" alt="GC" />
-        <span>0.00</span>
-      </div>
-      <div class="balance-pill">
-        <img src="assets/gold-BB1k7Ztr.png" alt="SC" />
-        <span>0.00</span>
-      </div>
-      <button class="wallet-btn" onclick="alert('Wallet feature coming soon')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-        Wallet
-      </button>
-    </div>
-  </div>
-
-  <!-- Loading Screen -->
-  <div class="game-loading" id="gameLoading">
-    <div class="game-loading-game" id="loadingGameImg"><img src="" alt="" /></div>
-    <div class="game-loading-spinner"></div>
-    <div class="game-loading-text">Loading game...</div>
-  </div>
-
-  <!-- Error Screen -->
-  <div class="game-error" id="gameError">
-    <div class="game-error-icon">🎰</div>
-    <div class="game-error-title">Game Unavailable</div>
-    <div class="game-error-desc">This demo shows the game page layout. Real games require a casino backend connection.</div>
-    <a href="lobby.html" class="game-error-btn">Back to Lobby</a>
-  </div>
-
-  <!-- Game Iframe -->
-  <div class="game-container">
-    <iframe class="game-iframe" id="gameFrame" allow="fullscreen; autoplay; clipboard-write; encrypted-media" allowfullscreen></iframe>
-  </div>
-
-  <!-- Mobile Bottom Nav -->
-  <div class="mobile-bottom-nav">
-    <a href="#" onclick="history.back(); return false;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      Back
-    </a>
-    <a href="lobby.html">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Home
-    </a>
-    <a href="lobby.html">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      Slots
-    </a>
-  </div>
-
-  <script>
-  (function() {
-    const params = new URLSearchParams(location.search);
-    const gameId = params.get('game') || '';
-    const provider = params.get('provider') || '';
-    const title = params.get('title') || 'Game';
-    const source = params.get('src') || '';
-
-    // Update header info
-    document.getElementById('gameTitle').textContent = title;
-    document.getElementById('gameProvider').textContent = provider ? provider.toUpperCase() : 'Loading...';
-    document.title = 'Vivid - ' + title;
-
-    // Loading game image
-    const loadingImg = document.querySelector('#loadingGameImg img');
-    if (source) {
-      loadingImg.src = source;
-      loadingImg.alt = title;
-    } else {
-      document.getElementById('loadingGameImg').style.display = 'none';
-    }
-
-    // Try to load the game via iframe
-    const gameFrame = document.getElementById('gameFrame');
-    const gameLoading = document.getElementById('gameLoading');
-    const gameError = document.getElementById('gameError');
-
-    // Build the chanced.com game URL
-    const chancedUrl = 'https://chanced.com/' + provider + '/casino/games/' + gameId;
-    
-    // Try loading in iframe
-    gameFrame.src = chancedUrl;
-    
-    // Check if iframe loads successfully
-    var loadTimeout = setTimeout(function() {
-      // After 5 seconds, check if iframe loaded
-      try {
-        // If we can access iframe content, it loaded
-        var iframeDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
-        if (iframeDoc && iframeDoc.body && iframeDoc.body.innerHTML.length > 0) {
-          gameLoading.classList.add('hidden');
-        } else {
-          // Iframe is empty or blocked
-          showError();
-        }
-      } catch(e) {
-        // Cross-origin error means iframe loaded but from different domain (good!)
-        // OR it means the request was blocked
-        // We can't tell for sure, so we show the loading for a bit then hide it
-        // If the iframe shows content, great. If not, user will see blank.
-        gameLoading.classList.add('hidden');
-      }
-    }, 5000);
-
-    // Alternative: if iframe fails to load (onerror), show error
-    gameFrame.onerror = function() {
-      clearTimeout(loadTimeout);
-      showError();
-    };
-
-    // Also handle case where iframe loads but shows error page
-    gameFrame.onload = function() {
-      clearTimeout(loadTimeout);
-      try {
-        var iframeDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
-        if (iframeDoc) {
-          var bodyText = iframeDoc.body.innerText || '';
-          // If it contains error messages, show our error
-          if (bodyText.includes('error') || bodyText.includes('blocked') || bodyText.includes('Cloudflare')) {
-            showError();
-          } else {
-            gameLoading.classList.add('hidden');
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<title>Vivid - Game</title>
+<meta content="#020617" name="theme-color"/>
+<link href="/vivid-casino/images/favicon/android-chrome-512x512.svg" rel="shortcut icon" sizes="196x196"/>
+<style>
+  .grecaptcha-badge { visibility: hidden; }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; margin: 0; display: none; }
+  html { background-color: #020617; height: 100%; }
+  body { width: 100vw; height: 100vh; -webkit-overflow-scrolling: touch; margin: 0; padding: 0; }
+  body::-webkit-scrollbar { width: 0; }
+  input[type='number'] { -moz-appearance: textfield; -webkit-appearance: textfield; appearance: textfield; }
+  .overflow-x-scroll { -webkit-overflow-scrolling: touch; }
+  .home-casino-slider, .home-jackpot-slider, .no-scrollbar { -webkit-overflow-scrolling: touch; }
+  .h-dvh { height: 100dvh; }
+  .min-h-dvh { min-height: 100dvh; }
+  .max-h-dvh { max-height: 100dvh; }
+  .max-h-svh { max-height: 100svh; }
+  .max-h-lvh { max-height: 100lvh; }
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          base: {
+            background: '#020617',
+            foreground: '#f8fafc',
+            border: '#1e293b',
+            accent: '#1e293b',
+            'accent-foreground': '#f8fafc',
+            sidebar: {
+              background: '#0f172a',
+              foreground: '#94a3b8',
+              accent: '#1e293b',
+              'accent-foreground': '#f8fafc',
+              border: '#1e293b'
+            },
+            input: {
+              background: '#0f172a',
+              border: '#334155'
+            },
+            muted: { foreground: '#64748b' },
+            primary: '#3b82f6'
           }
         }
-      } catch(e) {
-        // Cross-origin, assume it loaded fine
-        gameLoading.classList.add('hidden');
       }
-    };
-
-    function showError() {
-      gameLoading.classList.add('hidden');
-      gameError.classList.add('active');
-      gameFrame.style.display = 'none';
     }
-  })();
-  </script>
+  }
+</script>
+<style type="text/tailwindcss">
+  @layer base {
+    body { @apply bg-base-background text-base-foreground; }
+  }
+  @layer components {
+    .btn-primary { @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-4 py-2 transition-all duration-200; }
+    .btn-secondary { @apply bg-base-sidebar-accent hover:bg-base-border text-base-foreground font-semibold rounded-lg px-4 py-2 transition-all duration-200 border border-base-border; }
+  }
+</style>
+</head>
+<body class="bg-base-background text-white overflow-hidden">
+
+<div class="flex h-screen w-full flex-row text-white">
+  <!-- Sidebar -->
+  <div class="h-screen sticky top-0 left-0 max-[767px]:sticky max-[1024px]:absolute z-[99992]">
+    <div class="md:w-[256px] group sticky top-0 hidden h-screen flex-col transition-transform duration-500 ease-in-out bg-base-sidebar-background md:flex border-r border-base-border">
+      <div class="flex justify-between items-center px-2 md:py-4 py-[14px] border-b-[1px] border-base-border">
+        <a href="lobby.html" class="p-2 flex items-center gap-2">
+          <svg class="lucide lucide-arrow-left-to-line-icon lucide-arrow-left-to-line" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 19V5"></path><path d="m13 6-6 6 6 6"></path><path d="M7 12h14"></path></svg>
+          <span class="text-sm font-medium">Back to Lobby</span>
+        </a>
+      </div>
+      <div class="overflow-y-auto flex-grow overflow-x-hidden">
+        <aside class="flex flex-col h-full justify-start gap-2 p-2 pt-6">
+          <div class="flex flex-col gap-1 duration-150 px-2">
+            <div class="promo_race_bg">
+              <a class="promo_race_link px-3 py-1 flex cursor-pointer flex-row items-center gap-2 text-sm transition-all duration-300 ease-linear" href="/promo-race/6756">
+                <img class="flex-shrink-0" height="24" src="https://jjakinn.github.io/vivid-casino/assets/coin-BoIwyi0V.png" style="width: 24px; height: 24px;" width="24"/>
+                <p class="w-full delay-150 transition-opacity duration-150 ease-in-out font-semibold truncate">2,000 SC Race</p>
+                <img class="ml-auto" height="24" src="https://jjakinn.github.io/vivid-casino/assets/right-arrow-BlX0lG76.png" style="width: 24px; height: 24px;" width="24"/>
+              </a>
+            </div>
+            <a class="px-3 py-1 flex cursor-pointer flex-row items-center gap-2 rounded-md text-sm border border-transparent transition-all duration-300 ease-linear hover:bg-base-sidebar-accent text-base-sidebar-accent-foreground" href="/casino/group/popgames">
+              <img alt="Icon" class="flex-shrink-0" height="24" src="https://d3ta80o5sbquaz.cloudfront.net/categories/popgames.webp" style="width: 24px; height: 24px;" width="24"/>
+              <p class="w-full transition-opacity duration-150 delay-100 ease-in-out font-normal whitespace-nowrap">Popular Games</p>
+            </a>
+            <a class="px-3 py-1 flex cursor-pointer flex-row items-center gap-2 rounded-md text-sm border border-transparent transition-all duration-300 ease-linear hover:bg-base-sidebar-accent text-base-sidebar-accent-foreground" href="/casino/group/new">
+              <img alt="Icon" class="flex-shrink-0" height="24" src="https://d3ta80o5sbquaz.cloudfront.net/categories/new.webp" style="width: 24px; height: 24px;" width="24"/>
+              <p class="w-full transition-opacity duration-150 delay-100 ease-in-out font-normal whitespace-nowrap">New Releases</p>
+            </a>
+            <a class="px-3 py-1 flex cursor-pointer flex-row items-center gap-2 rounded-md text-sm border border-transparent transition-all duration-300 ease-linear hover:bg-base-sidebar-accent text-base-sidebar-accent-foreground" href="/casino/group/slots">
+              <img alt="Icon" class="flex-shrink-0" height="24" src="https://d3ta80o5sbquaz.cloudfront.net/categories/slots.webp" style="width: 24px; height: 24px;" width="24"/>
+              <p class="w-full transition-opacity duration-150 delay-100 ease-in-out font-normal whitespace-nowrap">Slot Games</p>
+            </a>
+            <a class="px-3 py-1 flex cursor-pointer flex-row items-center gap-2 rounded-md text-sm border border-transparent transition-all duration-300 ease-linear hover:bg-base-sidebar-accent text-base-sidebar-accent-foreground" href="/casino/group/live">
+              <img alt="Icon" class="flex-shrink-0" height="24" src="https://d3ta80o5sbquaz.cloudfront.net/categories/live.webp" style="width: 24px; height: 24px;" width="24"/>
+              <p class="w-full transition-opacity duration-150 delay-100 ease-in-out font-normal whitespace-nowrap">Live Dealers</p>
+            </a>
+            <a class="px-3 py-1 flex cursor-pointer flex-row items-center gap-2 rounded-md text-sm border border-transparent transition-all duration-300 ease-linear hover:bg-base-sidebar-accent text-base-sidebar-accent-foreground" href="/casino/group/trending">
+              <img alt="Icon" class="flex-shrink-0" height="24" src="https://d3ta80o5sbquaz.cloudfront.net/categories/trending.webp" style="width: 24px; height: 24px;" width="24"/>
+              <p class="w-full transition-opacity duration-150 delay-100 ease-in-out font-normal whitespace-nowrap">Trending</p>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex flex-col h-screen w-full md:w-full max-[1024px]:pl-[48px] max-[767px]:pl-0 relative">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 min-h-[63px] md:min-h-[73px] z-[99991]">
+      <div class="top-header-inner relative flex w-full h-full flex-row px-4 md:px-6 md:py-[12px] py-[7px] items-center justify-center border-solid bg-base-background border-b-[1px] border-base-border">
+        <div class="relative flex w-full max-w-[1200px] justify-between">
+          <div class="min-h-[40px] flex justify-between items-center relative">
+            <a href="lobby.html">
+              <img alt="Vivid" class="xsm_m:block hidden lg:w-[180px] sm:w-[150px] sm_m:w-[120px] w-[100px] object-contain" src="/vivid-casino/images/home/vivid-logo.png?v=5" style="object-fit:contain;height:auto;max-height:50px;transform:translateY(6px);"/>
+              <img alt="Vivid" class="xsm_m:hidden block h-8 object-contain" src="/vivid-casino/images/home/vivid-logo.png?v=5" style="object-fit:contain;height:32px;width:auto;"/>
+            </a>
+          </div>
+          <div class="flex items-center md:gap-4 gap-3">
+            <div class="relative">
+              <button class="bg-base-background hover:bg-base-accent border border-base-input-border rounded-md text-base-foreground font-medium text-sm px-4 sm:py-2.5 py-2 flex items-center gap-2 outline-none">
+                <div class="flex items-center gap-2">
+                  <img alt="icon" class="h-4 w-4" src="/vivid-casino/assets/gold-BB1k7Ztr.png"/>
+                  <span class="sm_m:text-sm text-xs">0.00</span>
+                </div>
+              </button>
+            </div>
+            <button class="btn-primary py-[7px] px-5 md:flex hidden items-center justify-center gap-2">
+              <img alt="icon" class="h-[26px]" src="/vivid-casino/assets/wallet-CtfedzaM.svg"/>
+              <span class="max-[575px]:hidden">Wallet</span>
+            </button>
+          </div>
+          <div class="flex items-center md:gap-4">
+            <div class="md:flex xl:w-64 lg:w-48 w-32 hidden items-center">
+              <button class="w-full flex items-center gap-1 px-3 py-2 bg-base-input-background border border-base-input-border rounded-md text-base-muted-foreground">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                <span class="text-sm">Search</span>
+              </button>
+            </div>
+            <div class="relative">
+              <button class="relative flex items-center outline-none md:px-0 p-3">
+                <svg class="size-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+              </button>
+            </div>
+            <div class="relative">
+              <button class="flex items-center outline-none md:pl-0 pl-2 py-3">
+                <svg class="w-6 md:block hidden" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Game Content -->
+    <div class="w-full flex-1 overflow-y-auto main_games" style="padding-top: 63px;">
+      <div class="!mt-0 md:mb-0 flex w-full grow touch-pan-y flex-col mb-[65px]">
+        <main class="p-4 md:p-6 w-full">
+          <div class="max-w-[1200px] w-full mx-auto">
+            <!-- Game Hero Section -->
+            <div class="flex flex-col lg:flex-row gap-6 mb-8">
+              <!-- Game Image -->
+              <div class="flex-shrink-0 mx-auto lg:mx-0">
+                <div class="relative rounded-xl overflow-hidden shadow-2xl" style="width: 280px; height: 392px;">
+                  <img id="gameImage" alt="Game" class="w-full h-full object-cover" src=""/>
+                </div>
+              </div>
+              
+              <!-- Game Info -->
+              <div class="flex-1 flex flex-col justify-center gap-4">
+                <div>
+                  <div class="text-sm text-blue-400 font-semibold mb-1" id="gameProvider">PROVIDER</div>
+                  <h1 class="text-3xl md:text-4xl font-bold text-white" id="gameTitle">Game Title</h1>
+                </div>
+                
+                <div class="flex flex-wrap gap-3">
+                  <span class="px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 text-sm font-medium border border-blue-600/30">Slot</span>
+                  <span class="px-3 py-1 rounded-full bg-green-600/20 text-green-400 text-sm font-medium border border-green-600/30">RTP 96.5%</span>
+                  <span class="px-3 py-1 rounded-full bg-purple-600/20 text-purple-400 text-sm font-medium border border-purple-600/30">High Volatility</span>
+                </div>
+                
+                <p class="text-slate-400 text-sm leading-relaxed max-w-xl">
+                  Experience the thrill of this exciting slot game with stunning graphics, immersive gameplay, and the chance to win big. Features include free spins, bonus rounds, and progressive jackpots.
+                </p>
+                
+                <div class="flex gap-3 mt-2">
+                  <button class="btn-primary px-8 py-3 text-lg flex items-center gap-2" onclick="playGame()">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Play Now
+                  </button>
+                  <button class="btn-secondary px-8 py-3 text-lg" onclick="demoGame()">
+                    Play Demo
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Game Screen / Iframe Area -->
+            <div class="w-full bg-black rounded-xl overflow-hidden mb-8 relative" style="aspect-ratio: 16/9; max-height: 600px;">
+              <div id="gameFrameContainer" class="w-full h-full flex items-center justify-center">
+                <div class="text-center">
+                  <div class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p class="text-slate-400">Loading game...</p>
+                </div>
+              </div>
+              <iframe id="gameFrame" class="w-full h-full border-none hidden" allow="fullscreen; autoplay" allowfullscreen></iframe>
+            </div>
+            
+            <!-- Latest Winners -->
+            <div class="mb-8">
+              <div class="flex items-center gap-2 mb-4">
+                <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 19.8 7 21c0 1.66 1.34 3 3 3"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 19.8 17 21c0 1.66-1.34 3-3 3"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                <h2 class="text-xl font-bold text-white">Latest Winners</h2>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-base-sidebar-background rounded-lg p-4 border border-base-border">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold">J</div>
+                    <span class="text-sm font-medium">Jake_99</span>
+                  </div>
+                  <div class="text-green-400 font-bold text-lg">$1,250.00</div>
+                  <div class="text-slate-500 text-xs mt-1">2 minutes ago</div>
+                </div>
+                <div class="bg-base-sidebar-background rounded-lg p-4 border border-base-border">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-bold">S</div>
+                    <span class="text-sm font-medium">Sarah_Win</span>
+                  </div>
+                  <div class="text-green-400 font-bold text-lg">$3,400.00</div>
+                  <div class="text-slate-500 text-xs mt-1">5 minutes ago</div>
+                </div>
+                <div class="bg-base-sidebar-background rounded-lg p-4 border border-base-border">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-yellow-600 flex items-center justify-center text-sm font-bold">M</div>
+                    <span class="text-sm font-medium">MikeHighRoller</span>
+                  </div>
+                  <div class="text-green-400 font-bold text-lg">$850.00</div>
+                  <div class="text-slate-500 text-xs mt-1">8 minutes ago</div>
+                </div>
+                <div class="bg-base-sidebar-background rounded-lg p-4 border border-base-border">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-sm font-bold">L</div>
+                    <span class="text-sm font-medium">Lucky_Luke</span>
+                  </div>
+                  <div class="text-green-400 font-bold text-lg">$5,200.00</div>
+                  <div class="text-slate-500 text-xs mt-1">12 minutes ago</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Similar Games -->
+            <div class="mb-8">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-white">Similar Games</h2>
+                <a href="lobby.html" class="text-blue-400 text-sm hover:text-blue-300 transition">View All</a>
+              </div>
+              <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <a href="game.html?game=sweetbonanza&provider=pragmatic&title=Sweet+Bonanza&src=https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20fruitsw.webp" class="group">
+                  <div class="relative rounded-lg overflow-hidden aspect-[157/220] bg-base-sidebar-background">
+                    <img src="https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20fruitsw.webp" alt="Sweet Bonanza" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
+                  </div>
+                  <p class="text-sm mt-2 text-slate-300 truncate">Sweet Bonanza</p>
+                </a>
+                <a href="game.html?game=gatesofolympus&provider=pragmatic&title=Gates+of+Olympus&src=https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20olympgate.webp" class="group">
+                  <div class="relative rounded-lg overflow-hidden aspect-[157/220] bg-base-sidebar-background">
+                    <img src="https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20olympgate.webp" alt="Gates of Olympus" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
+                  </div>
+                  <p class="text-sm mt-2 text-slate-300 truncate">Gates of Olympus</p>
+                </a>
+                <a href="game.html?game=bigbassbonanza&provider=pragmatic&title=Big+Bass+Bonanza&src=https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs10txbigbass.webp" class="group">
+                  <div class="relative rounded-lg overflow-hidden aspect-[157/220] bg-base-sidebar-background">
+                    <img src="https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs10txbigbass.webp" alt="Big Bass Bonanza" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
+                  </div>
+                  <p class="text-sm mt-2 text-slate-300 truncate">Big Bass Bonanza</p>
+                </a>
+                <a href="game.html?game=wolfgold&provider=pragmatic&title=Wolf+Gold&src=https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs25wolfgold.webp" class="group">
+                  <div class="relative rounded-lg overflow-hidden aspect-[157/220] bg-base-sidebar-background">
+                    <img src="https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs25wolfgold.webp" alt="Wolf Gold" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
+                  </div>
+                  <p class="text-sm mt-2 text-slate-300 truncate">Wolf Gold</p>
+                </a>
+                <a href="game.html?game=sugarrush&provider=pragmatic&title=Sugar+Rush&src=https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20sugarrush.webp" class="group">
+                  <div class="relative rounded-lg overflow-hidden aspect-[157/220] bg-base-sidebar-background">
+                    <img src="https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20sugarrush.webp" alt="Sugar Rush" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
+                  </div>
+                  <p class="text-sm mt-2 text-slate-300 truncate">Sugar Rush</p>
+                </a>
+                <a href="game.html?game=doghouse&provider=pragmatic&title=The+Dog+House&src=https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20doghouse.webp" class="group">
+                  <div class="relative rounded-lg overflow-hidden aspect-[157/220] bg-base-sidebar-background">
+                    <img src="https://d3ta80o5sbquaz.cloudfront.net/images/pragmatic/vs20doghouse.webp" alt="The Dog House" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
+                  </div>
+                  <p class="text-sm mt-2 text-slate-300 truncate">The Dog House</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Bottom Nav -->
+<div class="mobile-bottom-nav fixed bottom-0 left-0 right-0 h-[60px] bg-[#1e293b] border-t border-[#334155] z-[1001] flex justify-around items-center md:hidden">
+  <a href="lobby.html" class="flex flex-col items-center gap-1 text-[#64748b] text-xs">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    Home
+  </a>
+  <a href="lobby.html" class="flex flex-col items-center gap-1 text-[#64748b] text-xs">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+    Slots
+  </a>
+  <a href="#" onclick="history.back(); return false;" class="flex flex-col items-center gap-1 text-[#64748b] text-xs">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+    Back
+  </a>
+</div>
+
+<script>
+(function() {
+  const params = new URLSearchParams(location.search);
+  const gameId = params.get('game') || 'piggybrickbonanza';
+  const provider = params.get('provider') || 'gametech';
+  const title = params.get('title') || 'Piggy Brick Bonanza';
+  const src = params.get('src') || 'https://d3ta80o5sbquaz.cloudfront.net/images/gametech/piggybrickbonanza.webp';
+
+  document.getElementById('gameTitle').textContent = title;
+  document.getElementById('gameProvider').textContent = provider.toUpperCase();
+  document.getElementById('gameImage').src = src;
+  document.title = 'Vivid - ' + title;
+
+  window.playGame = function() {
+    const container = document.getElementById('gameFrameContainer');
+    const frame = document.getElementById('gameFrame');
+    container.style.display = 'none';
+    frame.classList.remove('hidden');
+    frame.src = 'https://chanced.com/' + provider + '/casino/games/' + gameId;
+  };
+
+  window.demoGame = function() {
+    alert('Demo mode coming soon!');
+  };
+})();
+</script>
+
 </body>
 </html>
