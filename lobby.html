@@ -115,6 +115,23 @@
             height: 100vh;
             min-height: -webkit-fill-available;
           }
+
+          /* Safari-only: sticky doesn't work in nested flex, use fixed */
+          header.sticky {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            right: 0;
+          }
+          /* Safari-only: compensate for fixed header removing flow */
+          .main_games {
+            padding-top: 63px;
+          }
+          @media (min-width: 768px) {
+            .main_games {
+              padding-top: 73px;
+            }
+          }
         }
       }
     </style>
