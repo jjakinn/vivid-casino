@@ -10,11 +10,11 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; background: #0f172a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow: hidden; }
 
-    /* Top Bar */
+    /* Top Bar - matches chanced.com styling */
     .game-header {
       position: fixed; top: 0; left: 0; right: 0; height: 56px;
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-      border-bottom: 1px solid #334155;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 16px; z-index: 1000; gap: 12px;
     }
@@ -42,7 +42,7 @@
     }
     .wallet-btn:hover { background: #2563eb; }
 
-    /* Game Container */
+    /* Game Iframe - Full Screen */
     .game-container {
       position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
       background: #000; display: flex; align-items: center; justify-content: center;
@@ -71,7 +71,7 @@
     }
     .game-loading-game img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Error Overlay */
+    /* Error Overlay - Shown when iframe fails */
     .game-error {
       position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
       background: #0f172a; display: none; flex-direction: column;
@@ -102,6 +102,7 @@
     .mobile-bottom-nav a svg { width: 22px; height: 22px; }
     @media (max-width: 767px) {
       .mobile-bottom-nav { display: flex; }
+      .game-container { bottom: 60px; }
     }
   </style>
 </head>
@@ -153,7 +154,7 @@
 
   <!-- Game Iframe -->
   <div class="game-container">
-    <iframe class="game-iframe" id="gameFrame" allow="fullscreen" allowfullscreen></iframe>
+    <iframe class="game-iframe" id="gameFrame" allow="fullscreen; autoplay; clipboard-write; encrypted-media" allowfullscreen></iframe>
   </div>
 
   <!-- Mobile Bottom Nav -->
@@ -194,24 +195,69 @@
       document.getElementById('loadingGameImg').style.display = 'none';
     }
 
-    // Try to load the game
+    // Try to load the game via iframe
     const gameFrame = document.getElementById('gameFrame');
     const gameLoading = document.getElementById('gameLoading');
     const gameError = document.getElementById('gameError');
 
-    // For demo purposes: show the loading screen for 3 seconds then show error
-    // In production, you'd set the iframe src to the actual game URL
-    setTimeout(function() {
-      gameLoading.classList.add('hidden');
-      // Show error since this is a demo without real backend
-      gameError.classList.add('active');
-    }, 3000);
+    // Build the chanced.com game URL
+    const chancedUrl = 'https://chanced.com/' + provider + '/casino/games/' + gameId;
+    
+    // Try loading in iframe
+    gameFrame.src = chancedUrl;
+    
+    // Check if iframe loads successfully
+    var loadTimeout = setTimeout(function() {
+      // After 5 seconds, check if iframe loaded
+      try {
+        // If we can access iframe content, it loaded
+        var iframeDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+        if (iframeDoc && iframeDoc.body && iframeDoc.body.innerHTML.length > 0) {
+          gameLoading.classList.add('hidden');
+        } else {
+          // Iframe is empty or blocked
+          showError();
+        }
+      } catch(e) {
+        // Cross-origin error means iframe loaded but from different domain (good!)
+        // OR it means the request was blocked
+        // We can't tell for sure, so we show the loading for a bit then hide it
+        // If the iframe shows content, great. If not, user will see blank.
+        gameLoading.classList.add('hidden');
+      }
+    }, 5000);
 
-    // Alternative: if you have a real game URL, uncomment below:
-    // const gameUrl = 'https://chanced.com/casino/games/' + provider + '-' + gameId;
-    // gameFrame.src = gameUrl;
-    // gameFrame.onload = function() { gameLoading.classList.add('hidden'); };
-    // gameFrame.onerror = function() { gameLoading.classList.add('hidden'); gameError.classList.add('active'); };
+    // Alternative: if iframe fails to load (onerror), show error
+    gameFrame.onerror = function() {
+      clearTimeout(loadTimeout);
+      showError();
+    };
+
+    // Also handle case where iframe loads but shows error page
+    gameFrame.onload = function() {
+      clearTimeout(loadTimeout);
+      try {
+        var iframeDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+        if (iframeDoc) {
+          var bodyText = iframeDoc.body.innerText || '';
+          // If it contains error messages, show our error
+          if (bodyText.includes('error') || bodyText.includes('blocked') || bodyText.includes('Cloudflare')) {
+            showError();
+          } else {
+            gameLoading.classList.add('hidden');
+          }
+        }
+      } catch(e) {
+        // Cross-origin, assume it loaded fine
+        gameLoading.classList.add('hidden');
+      }
+    };
+
+    function showError() {
+      gameLoading.classList.add('hidden');
+      gameError.classList.add('active');
+      gameFrame.style.display = 'none';
+    }
   })();
   </script>
 </body>
