@@ -117,7 +117,7 @@
         }
       }
 
-      /* Header padding for desktop sidebar — prevents logo from being hidden behind sidebar */
+      /* Header padding for desktop sidebar - prevents logo from being hidden behind sidebar */
       @media (min-width: 768px) {
         header.fixed {
           padding-left: 256px !important;
@@ -132,18 +132,31 @@
             height: 100vh;
             min-height: -webkit-fill-available;
           }
-
-          /* Safari: jackpot tile height fix — prevent vertical stretching */
-          .home-jackpot-slider .slider-tile,
-          .home-jackpot-slider .slider-tile > a,
-          .home-jackpot-slider .slider-tile > a > div,
-          .home-jackpot-slider .slider-tile img {
-            max-height: 220px !important;
-          }
-          .home-jackpot-slider .slider-tile > a > div {
-            height: auto !important;
-          }
         }
+      }
+
+      /* Safari fixes via JS detection class */
+      .safari .flex-col.h-dvh,
+      .safari .flex-col.h-screen {
+        height: 100vh !important;
+        min-height: -webkit-fill-available !important;
+      }
+
+      /* Safari: jackpot tile height fix - prevent vertical stretching */
+      .safari .home-jackpot-slider .slider-tile {
+        max-height: 220px !important;
+        height: 170px !important;
+        min-height: 170px !important;
+      }
+      .safari .home-jackpot-slider .slider-tile > a,
+      .safari .home-jackpot-slider .slider-tile > a > div {
+        max-height: 220px !important;
+        height: 170px !important;
+        min-height: 170px !important;
+      }
+      .safari .home-jackpot-slider .slider-tile img {
+        max-height: 220px !important;
+        height: auto !important;
       }
     </style>
 <!-- OneTrust Cookies Consent Notice start for www.jjakinn.github.io/vivid-casino -->
@@ -187,6 +200,11 @@
 
 </head>
 <body class="h-full w-full bg-base-background active">
+<script>
+if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+  document.body.classList.add('safari');
+}
+</script>
 <!-- Google Tag Manager (noscript) -->
 <!-- End Google Tag Manager (noscript) -->
 <input aria-hidden="true" id="custom_ip" name="ip" type="hidden" value="82.149.80.47"/>
