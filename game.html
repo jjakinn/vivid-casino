@@ -88,6 +88,30 @@
       z-index: 99999 !important;
     }
   }
+  /* Force logo size to match lobby exactly on all breakpoints */
+  header img[alt="Vivid"] {
+    height: 32px !important;
+    width: auto !important;
+    max-height: 50px !important;
+    object-fit: contain !important;
+  }
+  @media (min-width: 350px) {
+    header img[alt="Vivid"].xsm_m\:block {
+      height: auto !important;
+      width: 100px !important;
+    }
+  }
+  @media (min-width: 640px) {
+    header img[alt="Vivid"].sm_m\:block,
+    header img[alt="Vivid"].sm\:w-\[150px\] {
+      width: 150px !important;
+    }
+  }
+  @media (min-width: 1024px) {
+    header img[alt="Vivid"].lg\:w-\[180px\] {
+      width: 180px !important;
+    }
+  }
   /* Mobile bottom navigation bar */
   @media (max-width: 767px) {
     .mobile-bottom-nav {
