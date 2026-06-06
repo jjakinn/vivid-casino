@@ -72,6 +72,12 @@
     .xsm_m\:block { display: block !important; }
     .xsm_m\:hidden { display: none !important; }
   }
+  /* Header padding for desktop sidebar - prevents logo from being hidden behind sidebar */
+  @media (min-width: 768px) {
+    header.fixed {
+      padding-left: 256px !important;
+    }
+  }
 </style>
 </head>
 <body class="bg-base-background text-white overflow-hidden">
