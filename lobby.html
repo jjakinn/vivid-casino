@@ -117,11 +117,25 @@
         }
       }
 
+      /* Mobile: force identical header positioning across all pages */
+      @media (max-width: 767px) {
+        header.fixed { left: 0 !important; right: 0 !important; top: 0 !important; }
+        header .top-header-inner { padding-left: 16px !important; padding-right: 16px !important; }
+        header a img[alt="Vivid"] { transform: translateY(6px) !important; }
+      }
+
       /* Header padding for desktop sidebar - prevents logo from being hidden behind sidebar */
       @media (min-width: 768px) {
         header.fixed {
           padding-left: 256px !important;
         }
+      }
+
+      /* Mobile: force identical header positioning across all pages */
+      @media (max-width: 767px) {
+        header.fixed { left: 0 !important; right: 0 !important; top: 0 !important; }
+        header .top-header-inner { padding-left: 16px !important; padding-right: 16px !important; }
+        header a img[alt="Vivid"] { transform: translateY(6px) !important; }
       }
 
       @media not all and (min-resolution: 0.001dpcm) {
