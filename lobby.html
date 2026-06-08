@@ -980,6 +980,7 @@ function toggleSidebar() {
   var empty = document.getElementById('search-empty');
 
   function extractGames() {
+    allGames.length = 0; // Clear before re-populating
     var seen = new Set();
     document.querySelectorAll('.slider-tile:not(.see-all-button) a').forEach(function(link) {
       var href = link.getAttribute('href') || '';
