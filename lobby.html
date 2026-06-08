@@ -1013,6 +1013,19 @@ function toggleSidebar() {
         provider = params.provider || 'unknown';
         title = params.title || '';
         src = params.src || '';
+        // Skip if the stored src is the GC coin somehow
+        if (src.includes('gold-BB1k7Ztr') || src.includes('assets/gold')) {
+          src = '';
+          var allImgs = link.querySelectorAll('img');
+          for (var i = 0; i < allImgs.length; i++) {
+            var s = allImgs[i].getAttribute('src') || '';
+            if (s && !s.includes('gold-BB1k7Ztr') && !s.includes('assets/gold') && s.includes('cloudfront')) {
+              src = s;
+              break;
+            }
+          }
+          if (!src) return; // Skip if no real game image
+        }
       }
       else {
         return; // Skip unknown hrefs
@@ -1021,8 +1034,22 @@ function toggleSidebar() {
       if (seen.has(gameId)) return;
       seen.add(gameId);
 
-      var img = link.querySelector('img');
+      var img = link.querySelector('img[alt="Game Tile"]') || link.querySelector('img:not([alt="GC"])');
       if (!src) src = img ? img.getAttribute('src') : '';
+      // Skip if this is the GC coin image or no valid game image found
+      if (!src || src.includes('gold-BB1k7Ztr') || src.includes('assets/gold')) {
+        // Try one more time - get any img that looks like a game from CDN
+        var allImgs = link.querySelectorAll('img');
+        for (var i = 0; i < allImgs.length; i++) {
+          var s = allImgs[i].getAttribute('src') || '';
+          if (s && !s.includes('gold-BB1k7Ztr') && !s.includes('assets/gold') && s.includes('cloudfront')) {
+            img = allImgs[i];
+            src = s;
+            break;
+          }
+        }
+        if (!src || src.includes('gold-BB1k7Ztr')) return; // Skip jackpot-only tiles
+      }
       var alt = img ? img.getAttribute('alt') : '';
       if (!title) title = alt && alt !== 'Game Tile' ? alt : gameId.replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
 
