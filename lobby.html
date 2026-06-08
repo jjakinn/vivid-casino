@@ -981,22 +981,50 @@ function toggleSidebar() {
 
   function extractGames() {
     var seen = new Set();
-    document.querySelectorAll('.slider-tile:not(.see-all-button) a[href^="/"]').forEach(function(link) {
-      var href = link.getAttribute('href');
-      if (!href || href.includes('/casino/group/')) return;
+    document.querySelectorAll('.slider-tile:not(.see-all-button) a').forEach(function(link) {
+      var href = link.getAttribute('href') || '';
+      if (!href) return;
+      if (href.includes('/casino/group/')) return;
       if (href.includes('/promo-race/')) return;
       if (href.includes('/providers')) return;
-      if (seen.has(href)) return;
-      seen.add(href);
+      if (href === '#') return;
+
+      var provider, gameId, title, src;
+
+      // Pattern 1: Original href /provider/casino/games/gameid
+      if (href.charAt(0) === '/') {
+        var parts = href.replace(/^\//, '').split('/');
+        provider = parts[0] || 'unknown';
+        gameId = parts[parts.length - 1] || 'game';
+      }
+      // Pattern 2: Modified href game.html?game=...&provider=...
+      else if (href.indexOf('game.html?') === 0) {
+        var query = href.split('?')[1];
+        if (!query) return;
+        var pairs = query.split('&');
+        var params = {};
+        pairs.forEach(function(pair) {
+          var kv = pair.split('=');
+          if (kv.length === 2) {
+            try { params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]); } catch(e) {}
+          }
+        });
+        gameId = params.game || 'game';
+        provider = params.provider || 'unknown';
+        title = params.title || '';
+        src = params.src || '';
+      }
+      else {
+        return; // Skip unknown hrefs
+      }
+
+      if (seen.has(gameId)) return;
+      seen.add(gameId);
 
       var img = link.querySelector('img');
-      var src = img ? img.getAttribute('src') : '';
+      if (!src) src = img ? img.getAttribute('src') : '';
       var alt = img ? img.getAttribute('alt') : '';
-
-      var parts = href.replace(/^\//, '').split('/');
-      var provider = parts[0] || 'unknown';
-      var gameId = parts[parts.length - 1] || 'game';
-      var title = alt && alt !== 'Game Tile' ? alt : gameId.replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+      if (!title) title = alt && alt !== 'Game Tile' ? alt : gameId.replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
 
       allGames.push({ href: href, title: title, provider: provider, gameId: gameId, src: src });
     });
