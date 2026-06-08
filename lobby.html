@@ -954,10 +954,10 @@ function toggleSidebar() {
     <div id="search-count" style="color:#888;font-size:14px;margin-bottom:16px;"></div>
     <!-- Results Grid -->
     <div id="search-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;"></div>
-    <!-- No Results -->
+    <!-- No Results / Start Typing -->
     <div id="search-empty" style="display:none;text-align:center;color:#888;padding:60px 20px;">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" style="margin:0 auto 16px;"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.34-4.34"></path></svg>
-      <p style="font-size:16px;">No games found</p>
+      <p id="search-empty-text" style="font-size:16px;">No games found</p>
     </div>
   </div>
 </div>
@@ -1030,10 +1030,17 @@ function toggleSidebar() {
     });
   }
 
-  function renderGames(games) {
+  function renderGames(games, query) {
     results.innerHTML = '';
+    if (!query) {
+      empty.style.display = 'block';
+      document.getElementById('search-empty-text').textContent = 'Start typing to search games';
+      count.textContent = '';
+      return;
+    }
     if (games.length === 0) {
       empty.style.display = 'block';
+      document.getElementById('search-empty-text').textContent = 'No games found for "' + query + '"';
       count.textContent = '';
       return;
     }
@@ -1088,7 +1095,7 @@ function toggleSidebar() {
     input.value = '';
     input.focus();
     if (allGames.length === 0) extractGames();
-    renderGames(allGames);
+    renderGames([], ''); // empty on open
   };
 
   window.closeSearchModal = function() {
@@ -1097,7 +1104,8 @@ function toggleSidebar() {
   };
 
   input.addEventListener('input', function() {
-    renderGames(filterGames(input.value.trim()));
+    var query = input.value.trim();
+    renderGames(filterGames(query), query);
   });
 
   input.addEventListener('keydown', function(e) {
