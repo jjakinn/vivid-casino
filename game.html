@@ -418,6 +418,7 @@ function toggleSidebar() {
       }
 
       // Evolution Gaming & subsidiaries (all share the same freeplay site)
+      // NOTE: Evolution blocks iframe embedding, so these open in a popup
       if (['evolution','netent','redtiger','bigtimegaming','nolimitcity','nolimit','ezugi','bigtime'].includes(p)) {
         return 'https://games.evolution.com/';
       }
@@ -735,6 +736,14 @@ function toggleSidebar() {
       // Default fallback — show a helpful message in the iframe container
       return null;
     })(provider, gameId);
+
+    // Providers that block iframe embedding — must open in popup
+    const popupProviders = ['evolution','netent','redtiger','bigtimegaming','nolimitcity','nolimit','ezugi','bigtime','hacksaw','hacksawgaming','playngo','playngos','relax','wazdan','softswiss','gametech','hub88','3oaks','pgsoft','avatarux','booongo','platipus','tomhorn','bgaming','mascot','rubyplay','spinomenal','gameart','belatra','mrslotty','kagaming','ka','kalamba','fugaso','swintt','smartsoft','turbogames','evoplay','fourleafgaming','electricelephant','printstudios','backseat','reelriot','revolver','rogue','4theplayer','beterlive','corps','ela','ggaming','wingaming','koala','trigger','novomatic','endorphina','slotmill','onetouch','m2play','petersons','gooming','kendoo','gamzix','enjoygaming','netgaming','edgelabs','origami','maxwingaming','taparoo','sneakyslots','runebet','penguinking','originals'];
+    
+    if (demoUrl && popupProviders.includes(provider)) {
+      window.open(demoUrl, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+      return;
+    }
 
     if (!demoUrl) {
       const container = document.getElementById('gameFrameContainer');
