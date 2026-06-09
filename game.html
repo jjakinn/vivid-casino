@@ -737,11 +737,12 @@ function toggleSidebar() {
       return null;
     })(provider, gameId);
 
-    // Providers that block iframe embedding — must open in popup
-    const popupProviders = ['evolution','netent','redtiger','bigtimegaming','nolimitcity','nolimit','ezugi','bigtime','hacksaw','hacksawgaming','playngo','playngos','relax','wazdan','softswiss','gametech','hub88','3oaks','pgsoft','avatarux','booongo','platipus','tomhorn','bgaming','mascot','rubyplay','spinomenal','gameart','belatra','mrslotty','kagaming','ka','kalamba','fugaso','swintt','smartsoft','turbogames','evoplay','fourleafgaming','electricelephant','printstudios','backseat','reelriot','revolver','rogue','4theplayer','beterlive','corps','ela','ggaming','wingaming','koala','trigger','novomatic','endorphina','slotmill','onetouch','m2play','petersons','gooming','kendoo','gamzix','enjoygaming','netgaming','edgelabs','origami','maxwingaming','taparoo','sneakyslots','runebet','penguinking','originals'];
+    // Providers that block iframe embedding — redirect in same tab instead of popup
+    const iframeBlockedProviders = ['evolution','netent','redtiger','bigtimegaming','nolimitcity','nolimit','ezugi','bigtime','hacksaw','hacksawgaming','playngo','playngos','relax','wazdan','softswiss','gametech','hub88','3oaks','pgsoft','avatarux','booongo','platipus','tomhorn','bgaming','mascot','rubyplay','spinomenal','gameart','belatra','mrslotty','kagaming','ka','kalamba','fugaso','swintt','smartsoft','turbogames','evoplay','fourleafgaming','electricelephant','printstudios','backseat','reelriot','revolver','rogue','4theplayer','beterlive','corps','ela','ggaming','wingaming','koala','trigger','novomatic','endorphina','slotmill','onetouch','m2play','petersons','gooming','kendoo','gamzix','enjoygaming','netgaming','edgelabs','origami','maxwingaming','taparoo','sneakyslots','runebet','penguinking','originals'];
     
-    if (demoUrl && popupProviders.includes(provider)) {
-      window.open(demoUrl, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+    // For iframe-blocked providers, redirect in same tab instead of popup
+    if (demoUrl && iframeBlockedProviders.includes(provider)) {
+      window.location.href = demoUrl;
       return;
     }
 
