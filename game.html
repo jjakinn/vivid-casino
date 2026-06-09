@@ -411,7 +411,26 @@ function toggleSidebar() {
   };
 
   window.demoGame = function() {
-    alert('Demo mode coming soon!');
+    const demoUrl = (function(p, id) {
+      if (p === 'pragmatic') {
+        return 'https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=' + id + '&jurisdiction=99&lobbyUrl=https://www.pragmaticplay.com&currency=USD&language=en&returnUrl=https://www.pragmaticplay.com';
+      }
+      if (p === 'evolution') {
+        return 'https://games.evolution.com/';
+      }
+      return null;
+    })(provider, gameId);
+
+    if (!demoUrl) {
+      alert('Demo mode coming soon for this provider!');
+      return;
+    }
+
+    const container = document.getElementById('gameFrameContainer');
+    const frame = document.getElementById('gameFrame');
+    container.style.display = 'none';
+    frame.classList.remove('hidden');
+    frame.src = demoUrl;
   };
 })();
 </script>
