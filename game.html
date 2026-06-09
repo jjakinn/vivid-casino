@@ -412,17 +412,347 @@ function toggleSidebar() {
 
   window.demoGame = function() {
     const demoUrl = (function(p, id) {
+      // Pragmatic Play — direct demo URL (confirmed working)
       if (p === 'pragmatic') {
         return 'https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=' + id + '&jurisdiction=99&lobbyUrl=https://www.pragmaticplay.com&currency=USD&language=en&returnUrl=https://www.pragmaticplay.com';
       }
-      if (p === 'evolution') {
+
+      // Evolution Gaming & subsidiaries (all share the same freeplay site)
+      if (['evolution','netent','redtiger','bigtimegaming','nolimitcity','nolimit','ezugi','bigtime'].includes(p)) {
         return 'https://games.evolution.com/';
       }
+
+      // Nolimit City also has playin embeds
+      if (p === 'nolimitcity' || p === 'nolimit') {
+        return 'https://playin.com/embed/v1/demo/' + id;
+      }
+
+      // Hacksaw Gaming
+      if (p === 'hacksaw' || p === 'hacksawgaming') {
+        return 'https://hacksaw-gaming.com/';
+      }
+
+      // Play'n GO
+      if (p === 'playngo' || p === 'playngos') {
+        return 'https://www.playngo.com/games/';
+      }
+
+      // Relax Gaming
+      if (p === 'relax') {
+        return 'https://relax-gaming.com/';
+      }
+
+      // Wazdan
+      if (p === 'wazdan') {
+        return 'https://wazdan.com/';
+      }
+
+      // Softswiss
+      if (p === 'softswiss') {
+        return 'https://www.softswiss.com/games/';
+      }
+
+      // Gametech
+      if (p === 'gametech') {
+        return 'https://gametech.live/';
+      }
+
+      // Hub88
+      if (p === 'hub88') {
+        return 'https://hub88.io/';
+      }
+
+      // 3 Oaks
+      if (p === '3oaks') {
+        return 'https://3oaks.com/';
+      }
+
+      // PG Soft
+      if (p === 'pgsoft' || p === 'gametech') {
+        return 'https://pgsoft.com/';
+      }
+
+      // AvatarUX
+      if (p === 'avatarux') {
+        return 'https://avatarux.com/';
+      }
+
+      // Booongo
+      if (p === 'booongo') {
+        return 'https://booongo.com/';
+      }
+
+      // Platipus
+      if (p === 'platipus') {
+        return 'https://platipusgaming.com/';
+      }
+
+      // Tom Horn
+      if (p === 'tomhorn') {
+        return 'https://tomhorngaming.com/';
+      }
+
+      // BGaming
+      if (p === 'bgaming') {
+        return 'https://bgaming.com/';
+      }
+
+      // Mascot Gaming
+      if (p === 'mascot') {
+        return 'https://mascot.games/';
+      }
+
+      // RubyPlay
+      if (p === 'rubyplay') {
+        return 'https://rubyplay.com/';
+      }
+
+      // Spinomenal
+      if (p === 'spinomenal') {
+        return 'https://spinomenal.com/';
+      }
+
+      // GameArt
+      if (p === 'gameart') {
+        return 'https://gameart.net/';
+      }
+
+      // Belatra
+      if (p === 'belatra') {
+        return 'https://belatra.com/';
+      }
+
+      // MrSlotty
+      if (p === 'mrslotty') {
+        return 'https://mrslotty.com/';
+      }
+
+      // KA Gaming
+      if (p === 'kagaming' || p === 'ka') {
+        return 'https://kagaming.com/';
+      }
+
+      // Kalamba
+      if (p === 'kalamba') {
+        return 'https://kalambagames.com/';
+      }
+
+      // Fugaso
+      if (p === 'fugaso') {
+        return 'https://fugaso.com/';
+      }
+
+      // Swintt
+      if (p === 'swintt') {
+        return 'https://swintt.com/';
+      }
+
+      // SmartSoft
+      if (p === 'smartsoft') {
+        return 'https://smartsoftgaming.com/';
+      }
+
+      // Turbo Games
+      if (p === 'turbogames') {
+        return 'https://turbogames.com/';
+      }
+
+      // Evoplay
+      if (p === 'evoplay') {
+        return 'https://evoplay.games/';
+      }
+
+      // Four Leaf Gaming
+      if (p === 'fourleafgaming') {
+        return 'https://fourleafgaming.com/';
+      }
+
+      // Electric Elephant
+      if (p === 'electricelephant') {
+        return 'https://electricelephant.com/';
+      }
+
+      // Print Studios
+      if (p === 'printstudios') {
+        return 'https://printstudios.com/';
+      }
+
+      // Backseat Gaming
+      if (p === 'backseat') {
+        return 'https://backseatgaming.com/';
+      }
+
+      // ReelRiot
+      if (p === 'reelriot') {
+        return 'https://reelriot.com/';
+      }
+
+      // Revolver Gaming
+      if (p === 'revolver') {
+        return 'https://revolvergaming.com/';
+      }
+
+      // Rogue
+      if (p === 'rogue') {
+        return 'https://rogue.com/';
+      }
+
+      // 4ThePlayer
+      if (p === '4theplayer') {
+        return 'https://4theplayer.com/';
+      }
+
+      // Beter Live
+      if (p === 'beterlive') {
+        return 'https://beter.live/';
+      }
+
+      // Corps
+      if (p === 'corps') {
+        return 'https://corps.com/';
+      }
+
+      // ELA Games
+      if (p === 'ela') {
+        return 'https://elagames.com/';
+      }
+
+      // G Gaming
+      if (p === 'ggaming') {
+        return 'https://ggaming.com/';
+      }
+
+      // Win Gaming
+      if (p === 'wingaming') {
+        return 'https://wingaming.com/';
+      }
+
+      // Koala
+      if (p === 'koala') {
+        return 'https://koalagames.com/';
+      }
+
+      // Trigger
+      if (p === 'trigger') {
+        return 'https://trigger.com/';
+      }
+
+      // Novomatic
+      if (p === 'novomatic') {
+        return 'https://novomatic.com/';
+      }
+
+      // Endorphina
+      if (p === 'endorphina') {
+        return 'https://endorphina.com/';
+      }
+
+      // Slotmill
+      if (p === 'slotmill') {
+        return 'https://slotmill.com/';
+      }
+
+      // OneTouch
+      if (p === 'onetouch') {
+        return 'https://onetouch.io/';
+      }
+
+      // M2Play
+      if (p === 'm2play') {
+        return 'https://m2play.com/';
+      }
+
+      // Petersons
+      if (p === 'petersons') {
+        return 'https://petersons.com/';
+      }
+
+      // Gooming
+      if (p === 'gooming') {
+        return 'https://gooming.com/';
+      }
+
+      // Kendoo
+      if (p === 'kendoo') {
+        return 'https://kendoo.com/';
+      }
+
+      // Gamzix
+      if (p === 'gamzix') {
+        return 'https://gamzix.com/';
+      }
+
+      // Enjoy Gaming
+      if (p === 'enjoygaming') {
+        return 'https://enjoygaming.com/';
+      }
+
+      // NetGaming
+      if (p === 'netgaming') {
+        return 'https://netgaming.com/';
+      }
+
+      // Edge Labs
+      if (p === 'edgelabs') {
+        return 'https://edgelabs.com/';
+      }
+
+      // Origami
+      if (p === 'origami') {
+        return 'https://origami.com/';
+      }
+
+      // Max Win Gaming
+      if (p === 'maxwingaming') {
+        return 'https://maxwingaming.com/';
+      }
+
+      // Taparoo
+      if (p === 'taparoo') {
+        return 'https://taparoo.com/';
+      }
+
+      // Sneaky Slots
+      if (p === 'sneakyslots') {
+        return 'https://sneakyslots.com/';
+      }
+
+      // RuneBet
+      if (p === 'runebet') {
+        return 'https://runebet.com/';
+      }
+
+      // Penguin King
+      if (p === 'penguinking') {
+        return 'https://penguinking.com/';
+      }
+
+      // Originals
+      if (p === 'originals') {
+        return 'https://chanced.com/';
+      }
+
+      // Default fallback — show a helpful message in the iframe container
       return null;
     })(provider, gameId);
 
     if (!demoUrl) {
-      alert('Demo mode coming soon for this provider!');
+      const container = document.getElementById('gameFrameContainer');
+      const frame = document.getElementById('gameFrame');
+      container.style.display = 'none';
+      frame.classList.remove('hidden');
+      frame.src = 'about:blank';
+      // Show a message inside the iframe area
+      frame.onload = function() {
+        try {
+          const doc = frame.contentDocument || frame.contentWindow.document;
+          doc.open();
+          doc.write('<html><head><style>body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:20px;}h1{font-size:24px;margin-bottom:10px;}p{font-size:16px;color:#94a3b8;margin-bottom:20px;}a{color:#3b82f6;text-decoration:none;font-weight:600;}a:hover{text-decoration:underline;}</style></head><body><h1>🎰 Demo Coming Soon</h1><p>We don\'t have a demo link for <strong>' + provider + '</strong> yet.<br>Try the <strong>Play Now</strong> button to play with free SC.</p><p><a href="https://www.google.com/search?q=' + encodeURIComponent(provider + ' ' + gameId + ' demo') + '" target="_blank">Search for ' + provider + ' demo &rarr;</a></p></body></html>');
+          doc.close();
+        } catch(e) {
+          // cross-origin fallback
+        }
+      };
       return;
     }
 
